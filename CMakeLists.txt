@@ -53,9 +53,9 @@ set(REDIS_SERVER YES CACHE BOOL "Include Redis server using hiredis")
 set(REDIS_CLIENT YES CACHE BOOL "Include Redis client using hiredis")
 set(HTTP_SERVER YES CACHE BOOL "Include HTTP server using libmicrohttpd")
 set(HTTP_CLIENT YES CACHE BOOL "Include HTTP client support using curl")
-set(COMPILE_TESTS YES CACHE BOOL "Compile test framework")
+#set(COMPILE_TESTS NO CACHE BOOL "Compile test framework")
 set(COMPILE_STUBGEN YES CACHE BOOL "Compile the stubgenerator")
-set(COMPILE_EXAMPLES YES CACHE BOOL "Compile example programs")
+set(COMPILE_EXAMPLES NO CACHE BOOL "Compile example programs")
 
 option(WITH_COVERAGE "Build with code coverage flags" ON)
 
@@ -106,10 +106,10 @@ if (COMPILE_EXAMPLES)
 endif()
 
 # setup test suite
-if (COMPILE_TESTS)
-	enable_testing()
-	add_subdirectory(src/test)
-endif()
+#if (COMPILE_TESTS)
+#	enable_testing()
+#	add_subdirectory(src/test)
+#endif()
 
 # create documentation
 if (DOXYGEN_FOUND)

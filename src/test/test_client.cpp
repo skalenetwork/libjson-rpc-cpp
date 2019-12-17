@@ -9,7 +9,7 @@
 
 #include "checkexception.h"
 #include "mockclientconnector.h"
-#include <catch2/catch.hpp>
+#include <catch/catch.hpp>
 #include <jsonrpccpp/client.h>
 
 #define TEST_MODULE "[client]"

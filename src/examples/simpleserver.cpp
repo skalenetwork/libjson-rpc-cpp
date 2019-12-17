@@ -39,7 +39,7 @@ public:
 
 int main() {
   try {
-    HttpServer server(8383);
+    HttpServer server(8383, "../cert/SvetaRogova.crt","../cert/SvetaRogova.key");
     SampleServer serv(server);
     if (serv.StartListening()) {
       cout << "Server started successfully" << endl;

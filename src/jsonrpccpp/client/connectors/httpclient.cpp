@@ -54,12 +54,15 @@ void init_string(struct string *s) {
 HttpClient::HttpClient(const std::string &url) : url(url) {
   this->timeout = 10000;
   curl = curl_easy_init();
+
 }
 
 HttpClient::~HttpClient() { curl_easy_cleanup(curl); }
 
 void HttpClient::SendRPCMessage(const std::string &message,
                                 std::string &result) {
+
+  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
 
   curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
   curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
