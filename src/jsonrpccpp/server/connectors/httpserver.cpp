@@ -208,9 +208,15 @@ bool HttpServer::StartListening() {
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
 
-        std::string path_ca = "../cert/rootCA.crt";
+        std::string path_ca = "../../cert/rootCA.pem";
         std::string ca_cert;
         SpecificationParser::GetFileContent(path_ca, ca_cert);
+        if ( ca_cert.length == 0){
+          std::cerr << " root ca not found " << std::endl;
+        }
+        else{
+          std::cerr << " root ca is found " << std::endl;
+        }
 
         this->daemon = MHD_start_daemon(
             MHD_USE_SSL | mhd_flags, this->port, NULL, NULL,
