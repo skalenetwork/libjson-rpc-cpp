@@ -211,7 +211,7 @@ bool HttpServer::StartListening() {
         std::string path_ca = "../../cert/rootCA.pem";
         std::string ca_cert;
         SpecificationParser::GetFileContent(path_ca, ca_cert);
-        if ( ca_cert.length == 0){
+        if ( ca_cert.length() == 0){
           std::cerr << " root ca not found " << std::endl;
         }
         else{
