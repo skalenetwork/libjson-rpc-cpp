@@ -208,7 +208,7 @@ bool HttpServer::StartListening() {
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
 
-        std::string path_ca = "../cert/SvetaRogova.crt";
+        std::string path_ca = "../cert/rootCA.crt";
         std::string ca_cert;
         SpecificationParser::GetFileContent(path_ca, ca_cert);
 
