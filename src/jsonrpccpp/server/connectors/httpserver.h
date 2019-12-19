@@ -50,7 +50,7 @@ public:
    * "", then SSL/HTTPS is used with the given certificate.
    */
   HttpServer(int port, const std::string &sslcert = "",
-             const std::string &sslkey = "", int threads = 50);
+             const std::string &sslkey = "", const std::string & sslca = "", int threads = 50);
 
   ~HttpServer();
 
@@ -65,14 +65,18 @@ public:
 
   void SetUrlHandler(const std::string &url, IClientConnectionHandler *handler);
 
+  bool is_sslca_set();
+
 private:
   int port;
   int threads;
   bool running;
   std::string path_sslcert;
   std::string path_sslkey;
+  std::string path_sslca;
   std::string sslcert;
   std::string sslkey;
+  std::string sslca;
 
   struct MHD_Daemon *daemon;
   bool bindlocalhost;

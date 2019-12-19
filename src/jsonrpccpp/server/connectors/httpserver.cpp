@@ -152,9 +152,9 @@ struct mhd_coninfo {
 };
 
 HttpServer::HttpServer(int port, const std::string &sslcert,
-                       const std::string &sslkey, int threads)
+                       const std::string &sslkey, const std::string & sslca, int threads)
     : AbstractServerConnector(), port(port), threads(threads), running(false),
-      path_sslcert(sslcert), path_sslkey(sslkey), daemon(NULL), bindlocalhost(false) {}
+      path_sslcert(sslcert), path_sslkey(sslkey), path_sslca(sslca), daemon(NULL), bindlocalhost(false) {}
 
 HttpServer::~HttpServer() {}
 
@@ -174,6 +174,7 @@ HttpServer& HttpServer::BindLocalhost() {
 }
 
 bool HttpServer::StartListening() {
+  std::cerr << "enter StartListening " << std::endl;
   if (!this->running) {
     const bool has_epoll =
         (MHD_is_feature_supported(MHD_FEATURE_EPOLL) == MHD_YES);
@@ -204,14 +205,18 @@ bool HttpServer::StartListening() {
             MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_SOCK_ADDR, (struct sockaddr *)(&(this->loopback_addr)), MHD_OPTION_END);
 
     } else if (this->path_sslcert != "" && this->path_sslkey != "") {
+      std::cerr << "enter https version" << std::endl;
       try {
+        std::cerr << "enter try" << std::endl;
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
+//        std::cerr << "server cert set" << std::endl;
+//        std::cerr << "cert path is " << this->path_sslcert << std::endl;
+//        std::string path_ca = "cert/rootCA.pem";
+//        std::string ca_cert;
+        SpecificationParser::GetFileContent(this->path_sslca, this->sslca);
 
-        std::string path_ca = "../../cert/rootCA.pem";
-        std::string ca_cert;
-        SpecificationParser::GetFileContent(path_ca, ca_cert);
-        if ( ca_cert.length() == 0){
+        if ( this->sslca.length() == 0){
           std::cerr << " root ca not found " << std::endl;
         }
         else{
@@ -223,7 +228,7 @@ bool HttpServer::StartListening() {
             HttpServer::callback, this,
             MHD_OPTION_HTTPS_MEM_KEY, this->sslkey.c_str(),
             MHD_OPTION_HTTPS_MEM_CERT, this->sslcert.c_str(),
-            MHD_OPTION_HTTPS_MEM_TRUST, ca_cert.c_str(),
+            MHD_OPTION_HTTPS_MEM_TRUST, this->sslca.c_str(),
             MHD_OPTION_THREAD_POOL_SIZE, this->threads,
             MHD_OPTION_END);
 
@@ -231,6 +236,7 @@ bool HttpServer::StartListening() {
         return false;
       }
     } else {
+      std::cerr << "enter http version" << std::endl;
       this->daemon = MHD_start_daemon(
           mhd_flags, this->port, NULL, NULL, HttpServer::callback, this,
           MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_END);
@@ -293,28 +299,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
                          const char *upload_data, size_t *upload_data_size,
                          void **con_cls) {
 
-//  gnutls_session_t tls_session;
-//  const union MHD_ConnectionInfo *ci;
-//
-//  ci = MHD_get_connection_info (connection,
-//                                MHD_CONNECTION_INFO_GNUTLS_SESSION);
-//
-//  tls_session = (gnutls_session_t)ci->tls_session;
-//
-//  gnutls_x509_crt_t client_cert = get_client_certificate (tls_session);
-//
-//
-//
-//  if (client_cert != NULL) {
-//    std::cerr << "YESSSSSS!!!" << std::endl;
-//    std::cerr << "authority is " << cert_auth_get_dn(client_cert) << std::endl;
-//    std::cerr << "alternative name is " << MHD_cert_auth_get_alt_name(client_cert, 0, 0) << std::endl;
-//
-//  }
-//  else std::cerr << "NOOOO!!!" << std::endl;
-
-
-
   (void)version;
   if (*con_cls == NULL) {
     struct mhd_coninfo *client_connection = new mhd_coninfo;
@@ -327,40 +311,42 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       static_cast<struct mhd_coninfo *>(*con_cls);
 
 
-  const union MHD_ConnectionInfo *ci1;
+  if ( client_connection->server->is_sslca_set() ) {
 
-  ci1 = MHD_get_connection_info (client_connection->connection,
-                                MHD_CONNECTION_INFO_GNUTLS_SESSION);
+    const union MHD_ConnectionInfo *ci1;
 
-  gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
+    ci1 = MHD_get_connection_info(client_connection->connection,
+                                  MHD_CONNECTION_INFO_GNUTLS_SESSION);
 
-  gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
+    gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
 
-  gnutls_x509_crt_t client_certificate = get_client_certificate (tls_session1);
+   // gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
 
-  if (client_certificate == NULL){
-//    client_connection->code = 666;
-//    client_connection->server->SendResponse(
-//        "No client certificate found", client_connection);
-    std::cerr << "no cert" << std::endl;
-    delete client_connection;
-    *con_cls = NULL;
-    return MHD_NO;
+    gnutls_x509_crt_t client_certificate = get_client_certificate(tls_session1);
+
+    if (client_certificate == NULL) {
+      //    client_connection->code = 666;
+      //    client_connection->server->SendResponse(
+      //        "No client certificate found", client_connection);
+      std::cerr << "no cert" << std::endl;
+      delete client_connection;
+      *con_cls = NULL;
+      return MHD_NO;
+    } else {
+      std::cerr << "YESSSSSS!!!" << std::endl;
+      std::cerr << "authority is " << cert_auth_get_dn(client_certificate)
+                << std::endl;
+      std::cerr << "alternative name is "
+                << MHD_cert_auth_get_alt_name(client_certificate, 0, 0)
+                << std::endl;
+    }
+    gnutls_x509_crt_deinit(client_certificate);
   }
-  else {
-    std::cerr << "YESSSSSS!!!" << std::endl;
-    std::cerr << "authority is " << cert_auth_get_dn(client_certificate) << std::endl;
-    std::cerr << "alternative name is " << MHD_cert_auth_get_alt_name(client_certificate, 0, 0) << std::endl;
-  }
-
-
-  gnutls_x509_crt_deinit (client_certificate);
 
 
 
   if (string("POST") == method) {
     if (*upload_data_size != 0) {
-      std::cerr << "method is post" << std::endl;
       client_connection->request.write(upload_data, *upload_data_size);
       *upload_data_size = 0;
       return MHD_YES;
@@ -398,4 +384,8 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
   *con_cls = NULL;
 
   return MHD_YES;
+}
+
+bool HttpServer::is_sslca_set(){
+  return (sslca.length());
 }
