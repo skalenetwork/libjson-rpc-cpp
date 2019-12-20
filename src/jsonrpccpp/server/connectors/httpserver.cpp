@@ -154,7 +154,21 @@ struct mhd_coninfo {
 HttpServer::HttpServer(int port, const std::string &sslcert,
                        const std::string &sslkey, const std::string & sslca, int threads)
     : AbstractServerConnector(), port(port), threads(threads), running(false),
-      path_sslcert(sslcert), path_sslkey(sslkey), path_sslca(sslca), daemon(NULL), bindlocalhost(false) {}
+      path_sslcert(sslcert), path_sslkey(sslkey), path_sslca(sslca), daemon(NULL), bindlocalhost(false) {
+
+  if (path_sslca.length() > 0){
+    check_client_cert = true;
+  }
+  else {
+    check_client_cert = false;
+  }
+}
+
+HttpServer::HttpServer(int port, const std::string &sslcert,  const std::string &sslkey,
+           const std::string & sslca, bool check_client, int threads)
+    : AbstractServerConnector(), port(port), threads(threads), running(false),
+      path_sslcert(sslcert), path_sslkey(sslkey), path_sslca(sslca),
+      check_client_cert(check_client), daemon(NULL), bindlocalhost(false) {}
 
 HttpServer::~HttpServer() {}
 
@@ -210,10 +224,6 @@ bool HttpServer::StartListening() {
         std::cerr << "enter try" << std::endl;
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
-//        std::cerr << "server cert set" << std::endl;
-//        std::cerr << "cert path is " << this->path_sslcert << std::endl;
-//        std::string path_ca = "cert/rootCA.pem";
-//        std::string ca_cert;
         SpecificationParser::GetFileContent(this->path_sslca, this->sslca);
 
         if ( this->sslca.length() == 0){
@@ -243,6 +253,7 @@ bool HttpServer::StartListening() {
     }
     if (this->daemon != NULL)
       this->running = true;
+    else std::cerr << " daemon is null " << std::endl;
   }
   return this->running;
 }
@@ -311,7 +322,7 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       static_cast<struct mhd_coninfo *>(*con_cls);
 
 
-  if ( client_connection->server->is_sslca_set() ) {
+  if ( client_connection->server->is_client_cert_checked() ) {
 
     const union MHD_ConnectionInfo *ci1;
 
@@ -386,6 +397,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
   return MHD_YES;
 }
 
-bool HttpServer::is_sslca_set(){
-  return (sslca.length());
+bool HttpServer::is_client_cert_checked(){
+  return check_client_cert;
 }

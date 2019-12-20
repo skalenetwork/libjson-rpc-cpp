@@ -52,6 +52,9 @@ public:
   HttpServer(int port, const std::string &sslcert = "",
              const std::string &sslkey = "", const std::string & sslca = "", int threads = 50);
 
+  HttpServer(int port, const std::string &sslcert,  const std::string &sslkey,
+            const std::string & sslca, bool check_client, int threads = 50);
+
   ~HttpServer();
 
   //Bind to localhost only, deactivates TLS settings
@@ -65,12 +68,13 @@ public:
 
   void SetUrlHandler(const std::string &url, IClientConnectionHandler *handler);
 
-  bool is_sslca_set();
+  bool is_client_cert_checked();
 
 private:
   int port;
   int threads;
   bool running;
+  bool check_client_cert;
   std::string path_sslcert;
   std::string path_sslkey;
   std::string path_sslca;
