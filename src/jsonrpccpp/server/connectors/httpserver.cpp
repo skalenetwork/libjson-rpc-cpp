@@ -102,6 +102,7 @@ static gnutls_x509_crt_t get_client_certificate (gnutls_session_t tls_session)
 {
   unsigned int listsize;
   const gnutls_datum_t * pcert;
+
   //gnutls_certificate_status_t client_cert_status;
   unsigned int client_cert_status;
   gnutls_x509_crt_t client_cert;
@@ -113,6 +114,7 @@ static gnutls_x509_crt_t get_client_certificate (gnutls_session_t tls_session)
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
+  else std::cerr << "client cert verified with status "  << client_cert_status << std::endl;
 
   pcert = gnutls_certificate_get_peers(tls_session,
                                        &listsize);
@@ -123,6 +125,8 @@ static gnutls_x509_crt_t get_client_certificate (gnutls_session_t tls_session)
              "Failed to retrieve client certificate chain\n");
     return NULL;
   }
+  else std::cerr << "list size is " << listsize << std::endl;
+
   if (gnutls_x509_crt_init(&client_cert))
   {
     fprintf (stderr,
@@ -326,19 +330,26 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
 
     const union MHD_ConnectionInfo *ci1;
 
-    ci1 = MHD_get_connection_info(client_connection->connection,
+    ci1 = MHD_get_connection_info(connection,
                                   MHD_CONNECTION_INFO_GNUTLS_SESSION);
 
     gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
 
-   // gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
+    gnutls_certificate_credentials_t ca_cred;
+    gnutls_certificate_allocate_credentials(&ca_cred);
+    std::string ca_dir = "cert/ca_dir";
+    int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
+    std::cerr << " number of ca found is " << res << std::endl;
+    //gnutls_certificate_free_credentials
+
+    //gnutls_certificate_set_x509_system_trust();
+
+
+    //gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
 
     gnutls_x509_crt_t client_certificate = get_client_certificate(tls_session1);
 
     if (client_certificate == NULL) {
-      //    client_connection->code = 666;
-      //    client_connection->server->SendResponse(
-      //        "No client certificate found", client_connection);
       std::cerr << "no cert" << std::endl;
       delete client_connection;
       *con_cls = NULL;
