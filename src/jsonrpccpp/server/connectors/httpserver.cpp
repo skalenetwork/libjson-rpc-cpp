@@ -114,7 +114,13 @@ static gnutls_x509_crt_t get_client_certificate (gnutls_session_t tls_session)
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
-  else std::cerr << "client cert verified with status "  << client_cert_status << std::endl;
+  std::cerr << "client cert is verified with status "  << client_cert_status << std::endl;
+
+  if (client_cert_status != 0){
+    std::cerr << "client cert is not verified" << std::endl;
+    return NULL;
+  }
+  //else std::cerr << "client cert verified with status "  << client_cert_status << std::endl;
 
   pcert = gnutls_certificate_get_peers(tls_session,
                                        &listsize);
@@ -192,7 +198,7 @@ HttpServer& HttpServer::BindLocalhost() {
 }
 
 bool HttpServer::StartListening() {
-  std::cerr << "enter StartListening " << std::endl;
+  //std::cerr << "enter StartListening " << std::endl;
   if (!this->running) {
     const bool has_epoll =
         (MHD_is_feature_supported(MHD_FEATURE_EPOLL) == MHD_YES);
@@ -223,9 +229,9 @@ bool HttpServer::StartListening() {
             MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_SOCK_ADDR, (struct sockaddr *)(&(this->loopback_addr)), MHD_OPTION_END);
 
     } else if (this->path_sslcert != "" && this->path_sslkey != "") {
-      std::cerr << "enter https version" << std::endl;
+      //std::cerr << "enter https version" << std::endl;
       try {
-        std::cerr << "enter try" << std::endl;
+        //std::cerr << "enter try" << std::endl;
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
         SpecificationParser::GetFileContent(this->path_sslca, this->sslca);
@@ -250,7 +256,7 @@ bool HttpServer::StartListening() {
         return false;
       }
     } else {
-      std::cerr << "enter http version" << std::endl;
+      //std::cerr << "enter http version" << std::endl;
       this->daemon = MHD_start_daemon(
           mhd_flags, this->port, NULL, NULL, HttpServer::callback, this,
           MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_END);
@@ -337,11 +343,15 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
 
     gnutls_certificate_credentials_t ca_cred;
     gnutls_certificate_allocate_credentials(&ca_cred);
-    std::string ca_dir = "cert/ca_dir";
+    std::string ca_dir = "cert";
     int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
     std::cerr << " number of ca found is " << res << std::endl;
-    //gnutls_certificate_free_credentials
-
+    if (res == 0) {
+      std::cerr << "no ca cert" << std::endl;
+      delete client_connection;
+      *con_cls = NULL;
+      return MHD_NO;
+    }
     //gnutls_certificate_set_x509_system_trust();
 
 
@@ -355,14 +365,15 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       *con_cls = NULL;
       return MHD_NO;
     } else {
-      std::cerr << "YESSSSSS!!!" << std::endl;
+      std::cerr << "Got client cerificate" << std::endl;
       std::cerr << "authority is " << cert_auth_get_dn(client_certificate)
                 << std::endl;
-      std::cerr << "alternative name is "
-                << MHD_cert_auth_get_alt_name(client_certificate, 0, 0)
-                << std::endl;
+//      std::cerr << "alternative name is "
+//                << MHD_cert_auth_get_alt_name(client_certificate, 0, 0)
+//                << std::endl;
     }
     gnutls_x509_crt_deinit(client_certificate);
+    gnutls_certificate_free_credentials(ca_cred);
   }
 
 
