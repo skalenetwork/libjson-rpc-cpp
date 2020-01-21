@@ -343,7 +343,7 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
 
     gnutls_certificate_credentials_t ca_cred;
     gnutls_certificate_allocate_credentials(&ca_cred);
-    std::string ca_dir = "cert";
+    std::string ca_dir = "sgx_data/cert";
     int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
     std::cerr << " number of ca found is " << res << std::endl;
     if (res == 0) {
