@@ -16,7 +16,15 @@
 #include <map>
 
 namespace jsonrpc {
+
+
+
+
 class HttpClient : public IClientConnector {
+
+    static std::string  certFileFullPath;
+    static std::string keyFileFullPath;
+
 public:
   HttpClient(const std::string &url);
   virtual ~HttpClient();
@@ -27,6 +35,14 @@ public:
 
   void AddHeader(const std::string &attr, const std::string &val);
   void RemoveHeader(const std::string &attr);
+
+    static const std::string &getCertFileFullPath();
+
+    static void setCertFileFullPath(const std::string &certFileFullPath);
+
+    static const std::string &getKeyFileFullPath();
+
+    static void setKeyFileFullPath(const std::string &keyFileFullPath);
 
 private:
   std::map<std::string, std::string> headers;

@@ -68,6 +68,11 @@ void HttpClient::SendRPCMessage(const std::string &message,
   curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 
+  if (certFileFullPath.size() > 0 && keyFileFullPath.size() > 0) {
+      curl_easy_setopt(curl, CURLOPT_SSLCERT, getCertFileFullPath().data());
+      curl_easy_setopt(curl, CURLOPT_SSLKEY, getKeyFileFullPath().data());
+  }
+
   CURLcode res;
 
   struct string s;
@@ -124,4 +129,24 @@ void HttpClient::AddHeader(const std::string &attr, const std::string &val) {
 
 void HttpClient::RemoveHeader(const std::string &attr) {
   this->headers.erase(attr);
+}
+
+
+std::string  HttpClient::certFileFullPath("");
+std::string HttpClient::keyFileFullPath("");
+
+const std::string &HttpClient::getCertFileFullPath() {
+    return certFileFullPath;
+}
+
+void HttpClient::setCertFileFullPath(const std::string &certFileFullPath) {
+    HttpClient::certFileFullPath = certFileFullPath;
+}
+
+const std::string &HttpClient::getKeyFileFullPath() {
+    return keyFileFullPath;
+}
+
+void HttpClient::setKeyFileFullPath(const std::string &keyFileFullPath) {
+    HttpClient::keyFileFullPath = keyFileFullPath;
 }
