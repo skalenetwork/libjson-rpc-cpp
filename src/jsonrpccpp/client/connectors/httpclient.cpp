@@ -77,6 +77,7 @@ void HttpClient::SendRPCMessage(const std::string &message,
           curl_easy_setopt(curl, CURLOPT_SSLCERT, getCertFileFullPath().data());
           curl_easy_setopt(curl, CURLOPT_SSLKEY, getKeyFileFullPath().data());
           curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+          curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
       }
   }
 
