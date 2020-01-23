@@ -74,6 +74,9 @@ void HttpClient::SendRPCMessage(const std::string &message,
       std::string port = ":" + std::to_string(this->sslClientPort);
 
       if (url.find(port) != std::string::npos) {
+
+          printf("Haha\n");
+
           curl_easy_setopt(curl, CURLOPT_SSLCERT, getCertFileFullPath().data());
           curl_easy_setopt(curl, CURLOPT_SSLKEY, getKeyFileFullPath().data());
           curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
