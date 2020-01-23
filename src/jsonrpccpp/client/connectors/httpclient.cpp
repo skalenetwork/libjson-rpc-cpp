@@ -68,9 +68,15 @@ void HttpClient::SendRPCMessage(const std::string &message,
   curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 
+
   if (certFileFullPath.size() > 0 && keyFileFullPath.size() > 0) {
-      curl_easy_setopt(curl, CURLOPT_SSLCERT, getCertFileFullPath().data());
-      curl_easy_setopt(curl, CURLOPT_SSLKEY, getKeyFileFullPath().data());
+
+      std::string port = ":" + std::to_string(this->sslClientPort);
+
+      if (url.find(port) != -1) {
+          curl_easy_setopt(curl, CURLOPT_SSLCERT, getCertFileFullPath().data());
+          curl_easy_setopt(curl, CURLOPT_SSLKEY, getKeyFileFullPath().data());
+      }
   }
 
   CURLcode res;
@@ -134,6 +140,7 @@ void HttpClient::RemoveHeader(const std::string &attr) {
 
 std::string  HttpClient::certFileFullPath("");
 std::string HttpClient::keyFileFullPath("");
+uint32_t  HttpClient::sslClientPort = 0;
 
 const std::string &HttpClient::getCertFileFullPath() {
     return certFileFullPath;
@@ -149,4 +156,12 @@ const std::string &HttpClient::getKeyFileFullPath() {
 
 void HttpClient::setKeyFileFullPath(const std::string &keyFileFullPath) {
     HttpClient::keyFileFullPath = keyFileFullPath;
+}
+
+uint32_t HttpClient::getSslClientPort() {
+    return sslClientPort;
+}
+
+void HttpClient::setSslClientPort(uint32_t sslClientPort) {
+    HttpClient::sslClientPort = sslClientPort;
 }

@@ -24,6 +24,11 @@ class HttpClient : public IClientConnector {
 
     static std::string  certFileFullPath;
     static std::string keyFileFullPath;
+    static uint32_t sslClientPort;
+public:
+    static uint32_t getSslClientPort();
+
+    static void setSslClientPort(uint32_t sslClientPort);
 
 public:
   HttpClient(const std::string &url);
