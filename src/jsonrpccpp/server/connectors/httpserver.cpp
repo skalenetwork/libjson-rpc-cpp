@@ -14,6 +14,10 @@
 #include <jsonrpccpp/common/specificationparser.h>
 #include <sstream>
 
+#include <unistd.h>
+#include <stdio.h>
+#include <limits.h>
+
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
 
@@ -341,11 +345,18 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
 
     gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
 
-    gnutls_certificate_credentials_t ca_cred;
+      char cwd[PATH_MAX];
+      if (getcwd(cwd, sizeof(cwd)) == NULL) {
+          cerr << "could not get cwd";
+          exit(-1);
+      }
+
+
+      gnutls_certificate_credentials_t ca_cred;
     gnutls_certificate_allocate_credentials(&ca_cred);
-    std::string ca_dir = "sgx_data/cert_data";
+    std::string ca_dir = string(cwd) + "/sgx_data/cert_data";
     int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
-    std::cerr << " number of ca found is " << res << std::endl;
+    std::cerr << " number of ca found  in " << ca_dir << " is " << res << std::endl;
     if (res == 0) {
       std::cerr << "no ca cert" << std::endl;
       delete client_connection;
