@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    test_client.cpp
  * @date    28.09.2013
@@ -9,12 +9,12 @@
 
 #include "checkexception.h"
 #include "mockclientconnector.h"
-#include <catch2/catch.hpp>
-#include <jsonrpccpp/client.h>
+#include <catch/catch.hpp>
+#include <jsonrpccppskale/client.h>
 
 #define TEST_MODULE "[client]"
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 namespace testclient {

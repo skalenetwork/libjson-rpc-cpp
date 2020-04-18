@@ -10,7 +10,7 @@ HunterGate(
 	SHA1 "f0c476a3a0f9edd6182936d8c4460811f112189c"
 )
 
-project(libjson-rpc-cpp)
+project(libjson-rpc-cpp-skale)
 
 # list command no longer ignores empty elements
 cmake_policy(SET CMP0007 NEW)
@@ -90,10 +90,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 
 # setup global include_directories (for backwards compatibility)
 include_directories("${CMAKE_BINARY_DIR}/gen/")
-include_directories("${CMAKE_BINARY_DIR}/gen/jsonrpccpp/common")
+include_directories("${CMAKE_BINARY_DIR}/gen/jsonrpccppskale/common")
 
 # the core framework
-add_subdirectory(src/jsonrpccpp)
+add_subdirectory(src/jsonrpccppskale)
 
 #the stubgenerator
 if (COMPILE_STUBGEN)
@@ -132,7 +132,7 @@ add_custom_target(
 )
 
 # CMake package
-set(package_name "libjson-rpc-cpp")
+set(package_name "libjson-rpc-cpp-skale")
 include(CMakePackageConfigHelpers)
 set(config_install_destination ${CMAKE_INSTALL_LIBDIR}/${package_name}/cmake)
 configure_package_config_file(

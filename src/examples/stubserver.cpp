@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    stubserver.cpp
  * @date    02.05.2013
@@ -9,10 +9,10 @@
 #include <iostream>
 
 #include "gen/abstractstubserver.h"
-#include <jsonrpccpp/server/connectors/httpserver.h>
+#include <jsonrpccppskale/server/connectors/httpserver.h>
 #include <stdio.h>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 class MyStubServer : public AbstractStubServer {

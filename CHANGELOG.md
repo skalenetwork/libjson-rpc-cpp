@@ -118,7 +118,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `--version` option to jsonrpcstub.
 - msvc support.
 - data field support for JsonRpcException.
-- contributions guide: https://github.com/cinemast/libjson-rpc-cpp#contributions
+- contributions guide: https://github.com/cinemast/libjson-rpc-cpp-skale#contributions
 - HttpClient uses Http Keep-Alive, which improves performance drastically.
 - multiarch support.
 
@@ -137,7 +137,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v0.4.1] - 2014-12-01
 ### Added
 - coverity scan support
-- [API compatibility report](http://upstream.rosalinux.ru/versions/libjson-rpc-cpp.html)
+- [API compatibility report](http://upstream.rosalinux.ru/versions/libjson-rpc-cpp-skale.html)
 - Stubgenerator option for protocol switches (JSON-RPC 1.0 & 2.0)
 
 ### Changed
@@ -202,7 +202,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # [v0.2.1] - 2013-07-27
 ### Added
-- Support for positional parameters. (see at [example specification](https://github.com/cinemast/libjson-rpc-cpp/blob/master/src/example/spec.json) how to declare them)
+- Support for positional parameters. (see at [example specification](https://github.com/cinemast/libjson-rpc-cpp-skale/blob/master/src/example/spec.json) how to declare them)
 
 ## [0.2] - 2013-05-29
 ### Fixed

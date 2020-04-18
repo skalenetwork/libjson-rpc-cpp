@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    test_connector_redis.cpp
  * @date    13.08.2017
@@ -8,9 +8,9 @@
  ************************************************************************/
 
 #ifdef REDIS_TESTING
-#include <catch2/catch.hpp>
-#include <jsonrpccpp/client/connectors/redisclient.h>
-#include <jsonrpccpp/server/connectors/redisserver.h>
+#include <catch/catch.hpp>
+#include <jsonrpccppskale/client/connectors/redisclient.h>
+#include <jsonrpccppskale/server/connectors/redisserver.h>
 
 #include "checkexception.h"
 #include "mockclientconnectionhandler.h"
@@ -19,7 +19,7 @@
 #include <iostream>
 #include <sstream>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 #define TEST_PORT 6380

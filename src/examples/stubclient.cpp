@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    stubclient.cpp
  * @date    01.05.2013
@@ -10,9 +10,9 @@
 #include <iostream>
 
 #include "gen/stubclient.h"
-#include <jsonrpccpp/client/connectors/httpclient.h>
+#include <jsonrpccppskale/client/connectors/httpclient.h>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 int main() {
@@ -30,13 +30,13 @@ int main() {
     args["arg1"] = 1;
     args["arg2"] = 2;
     args["operator"] = "+";
-    Json::Value result = c.calculate(args);
-    cout << " 1 + 2 = " << result[0].asInt() << endl;
+    //Json::Value result = c.calculate(args);
+   // cout << " 1 + 2 = " << result[0].asInt() << endl;
     args["arg1"] = 3;
     args["arg2"] = 4;
     args["operator"] = "*";
-    result = c.calculate(args);
-    cout << " 3 * 4 = " << result[0].asInt() << endl;
+    //result = c.calculate(args);
+    //cout << " 3 * 4 = " << result[0].asInt() << endl;
     cout << "Compare: " << c.isEqual("Peter", "peter") << endl;
     cout << "Build object: " << c.buildObject("Peter", 1990) << endl;
 

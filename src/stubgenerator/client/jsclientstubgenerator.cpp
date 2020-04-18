@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    jsclientstubgenerator.cpp
  * @date    10/22/2014
@@ -10,7 +10,7 @@
 #include "jsclientstubgenerator.h"
 #include <algorithm>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 #define TEMPLATE_JS_PROLOG                                                     \

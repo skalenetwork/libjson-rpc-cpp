@@ -11,7 +11,7 @@ set(ALL_LIBS)
 if (BUILD_SHARED_LIBS)
         add_library(libjsonrpcstub SHARED ${jsonrpcstub_source} ${jsonrpcstub_header} ${jsonrpc_helper_source_common})
         target_link_libraries(libjsonrpcstub jsonrpccommon ${ARGTABLE_LIBRARIES})
-        set_target_properties(libjsonrpcstub PROPERTIES OUTPUT_NAME jsonrpccpp-stub)
+        set_target_properties(libjsonrpcstub PROPERTIES OUTPUT_NAME jsonrpccppskale-stub)
         list(APPEND ALL_LIBS libjsonrpcstub)
 endif()
 
@@ -19,7 +19,7 @@ endif()
 if (BUILD_STATIC_LIBS OR MSVC)
         add_library(libjsonrpcstubStatic STATIC ${jsonrpcstub_source} ${jsonrpcstub_header} ${jsonrpc_helper_source_common})
         target_link_libraries(libjsonrpcstubStatic common ${ARGTABLE_LIBRARIES})
-        set_target_properties(libjsonrpcstubStatic PROPERTIES OUTPUT_NAME jsonrpccpp-stub)
+        set_target_properties(libjsonrpcstubStatic PROPERTIES OUTPUT_NAME jsonrpccppskale-stub)
 
     if (NOT BUILD_SHARED_LIBS)
         add_library(libjsonrpcstub ALIAS libjsonrpcstubStatic)
@@ -45,14 +45,14 @@ if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     add_dependencies(jsonrpcstub manpage)
 endif()
 
-configure_file(${CMAKE_SOURCE_DIR}/cmake/libjsonrpccpp-stub.pc.cmake ${CMAKE_BINARY_DIR}/libjsonrpccpp-stub.pc)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/libjsonrpccppskale-stub.pc.cmake ${CMAKE_BINARY_DIR}/libjsonrpccppskale-stub.pc)
 
 install(FILES
-    "${CMAKE_BINARY_DIR}/libjsonrpccpp-stub.pc"
+    "${CMAKE_BINARY_DIR}/libjsonrpccppskale-stub.pc"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/stubgenerator/
-    DESTINATION include/jsonrpccpp/stubgen
+    DESTINATION include/jsonrpccppskale/stubgen
     FILES_MATCHING PATTERN "*.h")
 
 install(TARGETS ${ALL_LIBS} jsonrpcstub

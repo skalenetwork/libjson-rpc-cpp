@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    testredisserver.h
  * @date    24.08.2017
@@ -13,7 +13,7 @@
 #include <string>
 #include <sys/types.h>
 
-namespace jsonrpc {
+namespace jsonrpcskale {
 
     /**
      * This class is used to spawn a redis-server in the background and is
@@ -78,6 +78,6 @@ namespace jsonrpc {
             std::string key;
     };
 
-} // namespace jsonrpc
+} // namespace jsonrpcskale
 
 #endif // JSONRPC_TESTREDISSERVER_H

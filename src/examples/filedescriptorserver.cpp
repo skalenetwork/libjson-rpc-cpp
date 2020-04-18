@@ -30,15 +30,15 @@
  */
 
 #include <iostream>
-#include <jsonrpccpp/server.h>
-#include <jsonrpccpp/server/connectors/filedescriptorserver.h>
+#include <jsonrpccppskale/server.h>
+#include <jsonrpccppskale/server/connectors/filedescriptorserver.h>
 #include <stdio.h>
 #include <string>
 #include <unistd.h>
 
 #define DELIMITER_CHAR char(0x0A)
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 class SampleServer : public AbstractServer<SampleServer> {
@@ -76,7 +76,7 @@ int main() {
     } else {
       cerr << "Error starting Server" << endl;
     }
-  } catch (jsonrpc::JsonRpcException &e) {
+  } catch (jsonrpcskale::JsonRpcException &e) {
     cerr << e.what() << endl;
   }
 }

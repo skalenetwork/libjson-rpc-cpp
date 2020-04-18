@@ -8,8 +8,8 @@ then
 	PREFIX=/usr
 fi
 
-CLIENT_LIBS="-ljsoncpp -lcurl -ljsonrpccpp-common -ljsonrpccpp-client -lhiredis"
-SERVER_LIBS="-ljsoncpp -lmicrohttpd -ljsonrpccpp-common -ljsonrpccpp-server -lhiredis"
+CLIENT_LIBS="-ljsoncpp -lcurl -ljsonrpccppskale-common -ljsonrpccppskale-client -lhiredis"
+SERVER_LIBS="-ljsoncpp -lmicrohttpd -ljsonrpccppskale-common -ljsonrpccppskale-server -lhiredis"
 mkdir -p build && cd build
 
 echo "PREFIX: $PREFIX"

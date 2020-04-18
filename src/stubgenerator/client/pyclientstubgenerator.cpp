@@ -17,7 +17,7 @@
   "self.call_notification(\'<name>\', parameters)"
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 PythonClientStubGenerator::PythonClientStubGenerator(
     const string &stubname, std::vector<Procedure> &procedures,

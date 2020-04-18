@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    main.cpp
  * @date    29.09.2013
@@ -13,7 +13,7 @@
 #include "stubgeneratorfactory.h"
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 int main(int argc, char **argv) {
   vector<StubGenerator *> stubgens;

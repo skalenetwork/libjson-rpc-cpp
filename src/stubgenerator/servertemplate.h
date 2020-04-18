@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    servertemplate.h
  * @date    01.05.2013
@@ -20,11 +20,11 @@
 \n\
 #include <jsonrpc/server.h>\n\
 \n\
-class <stubname> : public jsonrpc::AbstractServer<<stubname>>\n\
+class <stubname> : public jsonrpcskale::AbstractServer<<stubname>>\n\
 {\n\
     public:\n\
-        <stubname>(jsonrpc::AbstractServerConnector& conn) :\n\
-            jsonrpc::AbstractServer<<stubname>>(conn) \n\
+        <stubname>(jsonrpcskale::AbstractServerConnector& conn) :\n\
+            jsonrpcskale::AbstractServer<<stubname>>(conn) \n\
         {\n\
 <procedurebindings>\n\
         }\n\
@@ -36,9 +36,9 @@ class <stubname> : public jsonrpc::AbstractServer<<stubname>>\n\
 "
 
 #define TEMPLATE_SERVER_METHODBINDING "\
-            this->bindAndAddMethod(new jsonrpc::Procedure(\"<procedurename>\", <paramtype>, <returntype>, <parameterlist> NULL), &<stubname>::<procedurename>I);"
+            this->bindAndAddMethod(new jsonrpcskale::Procedure(\"<procedurename>\", <paramtype>, <returntype>, <parameterlist> NULL), &<stubname>::<procedurename>I);"
 #define TEMPLATE_SERVER_NOTIFICATIONBINDING "\
-            this->bindAndAddNotification(new jsonrpc::Procedure(\"<procedurename>\", <paramtype>, <parameterlist> NULL), &<stubname>::<procedurename>I);"
+            this->bindAndAddNotification(new jsonrpcskale::Procedure(\"<procedurename>\", <paramtype>, <parameterlist> NULL), &<stubname>::<procedurename>I);"
 
 #define TEMPLATE_SERVER_METHODDEFINITION "\
         inline virtual void <procedurename>I(const Json::Value& request, Json::Value& response) \n\

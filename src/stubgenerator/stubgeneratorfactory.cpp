@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    stubgeneratorfactory.cpp
  * @date    11/19/2014
@@ -15,10 +15,10 @@
 #include "server/cppserverstubgenerator.h"
 #include <argtable2.h>
 #include <iostream>
-#include <jsonrpccpp/common/specificationparser.h>
-#include <jsonrpccpp/version.h>
+#include <jsonrpccppskale/common/specificationparser.h>
+#include <jsonrpccppskale/version.h>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 bool StubGeneratorFactory::createStubGenerators(

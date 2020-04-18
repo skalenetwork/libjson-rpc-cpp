@@ -3,7 +3,7 @@
 
 #include "../stubgenerator.h"
 
-namespace jsonrpc
+namespace jsonrpcskale
 {
     /**
      * The stub client this class generates requires jsonrpc_pyclient

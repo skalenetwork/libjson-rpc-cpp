@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    test_server.cpp
  * @date    28.09.2013
@@ -9,11 +9,11 @@
 
 #include "mockserverconnector.h"
 #include "testserver.h"
-#include <catch2/catch.hpp>
+#include <catch/catch.hpp>
 
 #define TEST_MODULE "[server]"
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 namespace testserver {

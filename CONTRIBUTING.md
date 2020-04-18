@@ -1,10 +1,10 @@
 # Developer Information
 
-If you plan to contribute to libjson-rpc-cpp, please skim the following information.
+If you plan to contribute to libjson-rpc-cpp-skale, please skim the following information.
 
 ## Developer Makefile
 
-The [Makefile](Makefile) contains useful commands that makes development for libjson-rpc-cpp easier.
+The [Makefile](Makefile) contains useful commands that makes development for libjson-rpc-cpp-skale easier.
 
 * `make build`: builds the framework in the default configuration
 * `make build-docker`: builds the framework for all distributions in docker
@@ -29,7 +29,7 @@ Here are some suggestions:
   - Adding new connectors.
   - Adding new languages to the stubgenerator.
 
-Additionally you can find a wishlist and planned features [here](https://github.com/cinemast/libjson-rpc-cpp/projects/1)
+Additionally you can find a wishlist and planned features [here](https://github.com/cinemast/libjson-rpc-cpp-skale/projects/1)
 
 ### Guidelines / Conventions
 

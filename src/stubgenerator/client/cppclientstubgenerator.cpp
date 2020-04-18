@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    CPPClientStubGenerator.cpp
  * @date    01.05.2013
@@ -10,11 +10,11 @@
 #include "cppclientstubgenerator.h"
 #include "../helper/cpphelper.h"
 
-#define TEMPLATE_CPPCLIENT_SIGCLASS "class <stubname> : public jsonrpc::Client"
+#define TEMPLATE_CPPCLIENT_SIGCLASS "class <stubname> : public jsonrpcskale::Client"
 
 #define TEMPLATE_CPPCLIENT_SIGCONSTRUCTOR                                      \
-  "<stubname>(jsonrpc::IClientConnector &conn, jsonrpc::clientVersion_t type " \
-  "= jsonrpc::JSONRPC_CLIENT_V2) : jsonrpc::Client(conn, type) {}"
+  "<stubname>(jsonrpcskale::IClientConnector &conn, jsonrpcskale::clientVersion_t type " \
+  "= jsonrpcskale::JSONRPC_CLIENT_V2) : jsonrpcskale::Client(conn, type) {}"
 
 #define TEMPLATE_CPPCLIENT_SIGMETHOD "<returntype> <methodname>(<parameters>) "
 
@@ -29,7 +29,7 @@
 #define TEMPLATE_RETURN "return result<cast>;"
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 CPPClientStubGenerator::CPPClientStubGenerator(
     const string &stubname, std::vector<Procedure> &procedures,
@@ -44,7 +44,7 @@ CPPClientStubGenerator::CPPClientStubGenerator(
 void CPPClientStubGenerator::generateStub() {
   vector<string> classname = CPPHelper::splitPackages(this->stubname);
   CPPHelper::prolog(*this, this->stubname);
-  this->writeLine("#include <jsonrpccpp/client.h>");
+  this->writeLine("#include <jsonrpccppskale/client.h>");
   this->writeNewLine();
 
   int depth = CPPHelper::namespaceOpen(*this, stubname);
@@ -136,7 +136,7 @@ void CPPClientStubGenerator::generateProcCall(Procedure &proc) {
     this->writeLine("else");
     this->increaseIndentation();
     this->writeLine("throw "
-                    "jsonrpc::JsonRpcException(jsonrpc::Errors::ERROR_CLIENT_"
+                    "jsonrpcskale::JsonRpcException(jsonrpcskale::Errors::ERROR_CLIENT_"
                     "INVALID_RESPONSE, result.toStyledString());");
     this->decreaseIndentation();
   } else {

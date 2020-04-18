@@ -7,12 +7,12 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <jsonrpccpp/server.h>
-#include <jsonrpccpp/server/connectors/tcpsocketserver.h>
+#include <jsonrpccppskale/server.h>
+#include <jsonrpccppskale/server/connectors/tcpsocketserver.h>
 #include <stdio.h>
 #include <string>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 class SampleServer : public AbstractServer<SampleServer> {
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
     } else {
       cout << "Error starting Server" << endl;
     }
-  } catch (jsonrpc::JsonRpcException &e) {
+  } catch (jsonrpcskale::JsonRpcException &e) {
     cerr << e.what() << endl;
   }
 }

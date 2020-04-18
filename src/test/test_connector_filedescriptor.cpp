@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    test_connector_unixdomainsocket.cpp
  * @date    26/10/2016
@@ -10,15 +10,15 @@
 #ifdef FILEDESCRIPTOR_TESTING
 #include "mockclientconnectionhandler.h"
 #include <catch2/catch.hpp>
-#include <jsonrpccpp/client/connectors/filedescriptorclient.h>
-#include <jsonrpccpp/common/sharedconstants.h>
-#include <jsonrpccpp/server/connectors/filedescriptorserver.h>
+#include <jsonrpccppskale/client/connectors/filedescriptorclient.h>
+#include <jsonrpccppskale/common/sharedconstants.h>
+#include <jsonrpccppskale/server/connectors/filedescriptorserver.h>
 #include <string.h>
 #include <unistd.h>
 
 #include "checkexception.h"
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 #define TEST_MODULE "[connector_filedescriptor]"

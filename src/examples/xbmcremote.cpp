@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    xbmcremote.cpp
  * @date    03.06.2013
@@ -8,7 +8,7 @@
  ************************************************************************/
 
 #include "gen/xbmcremote.h"
-#include <jsonrpccpp/client/connectors/httpclient.h>
+#include <jsonrpccppskale/client/connectors/httpclient.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 // Taken from:

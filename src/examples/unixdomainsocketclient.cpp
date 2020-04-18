@@ -6,10 +6,10 @@
  */
 
 #include <iostream>
-#include <jsonrpccpp/client.h>
-#include <jsonrpccpp/client/connectors/unixdomainsocketclient.h>
+#include <jsonrpccppskale/client.h>
+#include <jsonrpccppskale/client/connectors/unixdomainsocketclient.h>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 int main() {

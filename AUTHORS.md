@@ -3,7 +3,7 @@ Peter Spiess-Knafl <dev@spiessknafl.at>
 + cmake build system
 + stubgenerator
 
-*Notes about this list:* I try to update this list regularly, but sometimes I just forget. If I happen to oversee someones contributions, please raise an issue for that and sorry in advance. For an always up to date genarated list, see at the [GitHub contributors list](https://github.com/cinemast/libjson-rpc-cpp/graphs/contributors).
+*Notes about this list:* I try to update this list regularly, but sometimes I just forget. If I happen to oversee someones contributions, please raise an issue for that and sorry in advance. For an always up to date genarated list, see at the [GitHub contributors list](https://github.com/cinemast/libjson-rpc-cpp-skale/graphs/contributors).
 
 Feature contributions (chronological order)
 ===========================================

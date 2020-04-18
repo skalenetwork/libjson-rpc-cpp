@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    mockclientconnectionhandler.cpp
  * @date    10/29/2014
@@ -12,7 +12,7 @@
 #include <thread>
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 MockClientConnectionHandler::MockClientConnectionHandler()
     : response(""), request(""), timeout(0) {}

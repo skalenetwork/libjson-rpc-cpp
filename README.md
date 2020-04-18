@@ -1,35 +1,35 @@
 **I am currently working on a new C++17 implementation -> [json-rpc-cxx](https://github.com/jsonrpcx/json-rpc-cxx).**
 
-Master [![Build Status](https://travis-ci.org/cinemast/libjson-rpc-cpp.png?branch=master)](https://travis-ci.org/cinemast/libjson-rpc-cpp) [![codecov](https://codecov.io/gh/cinemast/libjson-rpc-cpp/branch/master/graph/badge.svg)](https://codecov.io/gh/cinemast/libjson-rpc-cpp)
-Develop [![Build Status](https://travis-ci.org/cinemast/libjson-rpc-cpp.png?branch=develop)](https://travis-ci.org/cinemast/libjson-rpc-cpp) [![codecov](https://codecov.io/gh/cinemast/libjson-rpc-cpp/branch/develop/graph/badge.svg)](https://codecov.io/gh/cinemast/libjson-rpc-cpp) |
+Master [![Build Status](https://travis-ci.org/cinemast/libjson-rpc-cpp-skale.png?branch=master)](https://travis-ci.org/cinemast/libjson-rpc-cpp-skale) [![codecov](https://codecov.io/gh/cinemast/libjson-rpc-cpp-skale/branch/master/graph/badge.svg)](https://codecov.io/gh/cinemast/libjson-rpc-cpp-skale)
+Develop [![Build Status](https://travis-ci.org/cinemast/libjson-rpc-cpp-skale.png?branch=develop)](https://travis-ci.org/cinemast/libjson-rpc-cpp-skale) [![codecov](https://codecov.io/gh/cinemast/libjson-rpc-cpp-skale/branch/develop/graph/badge.svg)](https://codecov.io/gh/cinemast/libjson-rpc-cpp-skale) |
 [![Coverity Status](https://scan.coverity.com/projects/3169/badge.svg?flat=1)](https://scan.coverity.com/projects/3169)
 
-libjson-rpc-cpp
+libjson-rpc-cpp-skale
 ===============
 
 This framework provides cross platform JSON-RPC (remote procedure call) support for C++.
 It is fully JSON-RPC [2.0 & 1.0 compatible](http://www.jsonrpc.org/specification).
 
-![libjson-rpc-cpp logo](https://github.com/cinemast/libjson-rpc-cpp/blob/master/dev/artwork/logo.png?raw=true)
+![libjson-rpc-cpp-skale logo](https://github.com/cinemast/libjson-rpc-cpp-skale/blob/master/dev/artwork/logo.png?raw=true)
 
-**5 good reasons for using libjson-rpc-cpp in your next RPC project**
+**5 good reasons for using libjson-rpc-cpp-skale in your next RPC project**
 - Full JSON-RPC 2.0 & partial JSON-RPC 1.0 client and server Support.
 - jsonrpcstub - a tool that generates stub-classes for your JSON-RPC client and server applications.
 - Ready to use HTTP + TCP server and client to provide simple interfaces for your JSON-RPC application.
 - Cross platform build support for Linux and OS X.
 - Super liberal [MIT-License](http://en.wikipedia.org/wiki/MIT_License).
 
-**Other good reasons to use libjson-rpc-cpp**
+**Other good reasons to use libjson-rpc-cpp-skale**
 - Easy to use [cmake](http://www.cmake.org) cross platform build system.
 - Clean and simple architecture, which makes it easy to extend.
-- Continuously tested under MacOS, and [various linux distributions](https://travis-ci.org/cinemast/libjson-rpc-cpp).
+- Continuously tested under MacOS, and [various linux distributions](https://travis-ci.org/cinemast/libjson-rpc-cpp-skale).
 - Automated testing using `make test`.
 - Useful Examples provided. e.g. XBMC Remote using json-rpc client part and stub generator.
 - The stubgenerator currently supports C++, JavaScript, and Python.
 
 Overview
 =========
-![libjson-rpc-cpp logo](dev/artwork/overview.png?raw=true)
+![libjson-rpc-cpp-skale logo](dev/artwork/overview.png?raw=true)
 
 Install the framework
 =====================
@@ -37,39 +37,39 @@ Install the framework
 **Debian (stretch) and Ubuntu (15.10 or later)**
 
 ```sh
-sudo apt-get install libjsonrpccpp-dev libjsonrpccpp-tools
+sudo apt-get install libjsonrpccppskale-dev libjsonrpccppskale-tools
 ```
 
 **Fedora**
 
 ```sh
-sudo dnf install libjson-rpc-cpp-devel libjson-rpc-cpp-tools
+sudo dnf install libjson-rpc-cpp-skale-devel libjson-rpc-cpp-skale-tools
 ```
 
 **Arch Linux**
 
-For Arch Linux there is a [PKGBUILD provided in the AUR](https://aur.archlinux.org/packages/libjson-rpc-cpp/).
+For Arch Linux there is a [PKGBUILD provided in the AUR](https://aur.archlinux.org/packages/libjson-rpc-cpp-skale/).
 
 ```sh
-sudo aura -A libjson-rpc-cpp
+sudo aura -A libjson-rpc-cpp-skale
 ```
 
 **Gentoo Linux**
 
 ```sh
-sudo emerge dev-cpp/libjson-rpc-cpp
+sudo emerge dev-cpp/libjson-rpc-cpp-skale
 ```
 
 **Mac OS X**
 
 For OS X a [Brew](http://brew.sh) package is available:
 ```sh
-brew install libjson-rpc-cpp
+brew install libjson-rpc-cpp-skale
 ```
 
 **Windows**
 
-There is a ready to use compiled package [here](http://spiessknafl.at/libjson-rpc-cpp).
+There is a ready to use compiled package [here](http://spiessknafl.at/libjson-rpc-cpp-skale).
 Just download execute the installer EXE.
 
 Build from source
@@ -93,9 +93,9 @@ Build
 -----
 
 ```sh
-git clone git://github.com/cinemast/libjson-rpc-cpp.git
-mkdir -p libjson-rpc-cpp/build
-cd libjson-rpc-cpp/build
+git clone git://github.com/cinemast/libjson-rpc-cpp-skale.git
+mkdir -p libjson-rpc-cpp-skale/build
+cd libjson-rpc-cpp-skale/build
 cmake .. && make
 sudo make install
 sudo ldconfig          #only required for linux
@@ -173,7 +173,7 @@ In the main function the concrete server is instantiated and started. That is al
 Compile the server with:
 
 ```sh
-g++ stubserver.cpp -ljsoncpp -lmicrohttpd -ljsonrpccpp-common -ljsonrpccpp-server -o sampleserver
+g++ stubserver.cpp -ljsoncpp -lmicrohttpd -ljsonrpccppskale-common -ljsonrpccppskale-server -o sampleserver
 ```
 
 ### Step 4: Create the client application
@@ -185,7 +185,7 @@ See [src/examples/stubclient.cpp](src/examples/stubclient.cpp)
 Compile the client with:
 
 ```sh
-g++ stubclient.cpp -ljsoncpp -lcurl -ljsonrpccpp-common -ljsonrpccpp-client -o sampleclient
+g++ stubclient.cpp -ljsoncpp -lcurl -ljsonrpccppskale-common -ljsonrpccppskale-client -o sampleclient
 ```
 
 ## Contributions
@@ -200,7 +200,7 @@ Changelogs can be found [here](CHANGELOG.md).
 
 ## API compatibility
 We do our best to keep the API/ABI stable, to prevent problems when updating this framework.
-A compatiblity report can be found [here](http://upstream.rosalinux.ru/versions/libjson-rpc-cpp.html).
+A compatiblity report can be found [here](http://upstream.rosalinux.ru/versions/libjson-rpc-cpp-skale.html).
 
 ## License
 This framework is licensed under [MIT](http://en.wikipedia.org/wiki/MIT_License).

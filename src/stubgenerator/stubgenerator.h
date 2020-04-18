@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    stubgenerator.h
  * @date    01.05.2013
@@ -11,11 +11,11 @@
 #define JSONRPC_CPP_STUBGENERATOR_H
 
 #include <string>
-#include <jsonrpccpp/common/procedure.h>
+#include <jsonrpccppskale/common/procedure.h>
 
 #include "codegenerator.h"
 
-namespace jsonrpc
+namespace jsonrpcskale
 {
     enum connectiontype_t {CONNECTION_HTTP};
 

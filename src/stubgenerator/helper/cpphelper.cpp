@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    cpphelper.cpp
  * @date    29.09.2013
@@ -13,7 +13,7 @@
 #include <sstream>
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 #define TEMPLATE_CPPSERVER_GUARD1 "#ifndef JSONRPC_CPP_STUB_<STUBNAME>_H_"
 #define TEMPLATE_CPPSERVER_GUARD2 "#define JSONRPC_CPP_STUB_<STUBNAME>_H_"
@@ -72,22 +72,22 @@ string CPPHelper::toString(jsontype_t type) {
   string result;
   switch (type) {
   case JSON_BOOLEAN:
-    result = "jsonrpc::JSON_BOOLEAN";
+    result = "jsonrpcskale::JSON_BOOLEAN";
     break;
   case JSON_INTEGER:
-    result = "jsonrpc::JSON_INTEGER";
+    result = "jsonrpcskale::JSON_INTEGER";
     break;
   case JSON_REAL:
-    result = "jsonrpc::JSON_REAL";
+    result = "jsonrpcskale::JSON_REAL";
     break;
   case JSON_STRING:
-    result = "jsonrpc::JSON_STRING";
+    result = "jsonrpcskale::JSON_STRING";
     break;
   case JSON_OBJECT:
-    result = "jsonrpc::JSON_OBJECT";
+    result = "jsonrpcskale::JSON_OBJECT";
     break;
   case JSON_ARRAY:
-    result = "jsonrpc::JSON_ARRAY";
+    result = "jsonrpcskale::JSON_ARRAY";
     break;
   }
   return result;

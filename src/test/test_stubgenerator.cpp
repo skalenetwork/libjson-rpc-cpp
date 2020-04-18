@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-cpp-skale
  *************************************************************************
  * @file    test_connector_http.cpp
  * @date    28.09.2013
@@ -8,9 +8,9 @@
  ************************************************************************/
 
 #ifdef STUBGEN_TESTING
-#include <catch2/catch.hpp>
+#include <catch/catch.hpp>
 
-#include <jsonrpccpp/common/specificationparser.h>
+#include <jsonrpccppskale/common/specificationparser.h>
 #include <stubgenerator/client/cppclientstubgenerator.h>
 #include <stubgenerator/client/jsclientstubgenerator.h>
 #include <stubgenerator/client/pyclientstubgenerator.h>
@@ -20,7 +20,7 @@
 
 #include <sstream>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 namespace teststubgen {
@@ -60,7 +60,7 @@ TEST_CASE("test stubgen cppclient", TEST_MODULE) {
         string::npos);
   CHECK(result.find("namespace ns1") != string::npos);
   CHECK(result.find("namespace ns2") != string::npos);
-  CHECK(result.find("class TestStubClient : public jsonrpc::Client") !=
+  CHECK(result.find("class TestStubClient : public jsonrpcskale::Client") !=
         string::npos);
   CHECK(result.find("std::string test_method(const std::string& name) ") !=
         string::npos);
@@ -92,7 +92,7 @@ TEST_CASE("test stubgen cppserver", TEST_MODULE) {
   CHECK(result.find("namespace ns1") != string::npos);
   CHECK(result.find("namespace ns2") != string::npos);
   CHECK(result.find("class TestStubServer : public "
-                    "jsonrpc::AbstractServer<TestStubServer>") != string::npos);
+                    "jsonrpcskale::AbstractServer<TestStubServer>") != string::npos);
   CHECK(result.find(
             "virtual std::string test_method(const std::string& name) = 0;") !=
         string::npos);
@@ -103,9 +103,9 @@ TEST_CASE("test stubgen cppserver", TEST_MODULE) {
                     "const Json::Value& values) = 0;") != string::npos);
   CHECK(result.find("virtual void test_notification2(const Json::Value& "
                     "object, const Json::Value& values) = 0;") != string::npos);
-  CHECK(result.find("this->bindAndAddMethod(jsonrpc::Procedure(\"test.method\","
-                    " jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_STRING, "
-                    "\"name\",jsonrpc::JSON_STRING, NULL), "
+  CHECK(result.find("this->bindAndAddMethod(jsonrpcskale::Procedure(\"test.method\","
+                    " jsonrpcskale::PARAMS_BY_NAME, jsonrpcskale::JSON_STRING, "
+                    "\"name\",jsonrpcskale::JSON_STRING, NULL), "
                     "&ns1::ns2::TestStubServer::test_methodI);") !=
         string::npos);
   CHECK(result.find("inline virtual void test_notificationI("
