@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    testserver.cpp
  * @date    08.03.2013
@@ -11,7 +11,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 TestServer::TestServer(AbstractServerConnector &connector, serverVersion_t type)
     : AbstractServer<TestServer>(connector, type), cnt(-1) {

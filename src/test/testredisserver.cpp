@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    testredisserver.cpp
  * @date    24.08.2017
@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 using namespace std;
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 
 #define REDIS_BIN "redis-server"
 #define REDIS_BIN_DIR "/usr/bin/"

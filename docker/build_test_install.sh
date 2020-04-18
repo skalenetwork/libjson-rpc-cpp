@@ -8,8 +8,8 @@ then
 	PREFIX=/usr
 fi
 
-CLIENT_LIBS="-ljsoncpp -lcurl -ljsonrpccpp-common -ljsonrpccpp-client -lhiredis"
-SERVER_LIBS="-ljsoncpp -lmicrohttpd -ljsonrpccpp-common -ljsonrpccpp-server -lhiredis"
+CLIENT_LIBS="-ljsoncpp -lcurl -ljsonrpccppskale-common -ljsonrpccppskale-client -lhiredis"
+SERVER_LIBS="-ljsoncpp -lmicrohttpd -ljsonrpccppskale-common -ljsonrpccppskale-server -lhiredis"
 mkdir -p build && cd build
 
 echo "PREFIX: $PREFIX"
@@ -35,7 +35,7 @@ g++ -std=c++11 simpleclient.cpp $CLIENT_LIBS -o simpleclient
 g++ -std=c++11 simpleserver.cpp $SERVER_LIBS -o simpleserver
 
 mkdir -p gen && cd gen
-jsonrpcstub ../spec.json --cpp-server=AbstractStubServer --cpp-client=StubClient
+jsonrpcskalestub ../spec.json --cpp-server=AbstractStubServer --cpp-client=StubClient
 cd ..
 g++ -std=c++11 stubclient.cpp $CLIENT_LIBS -o stubclient
 g++ -std=c++11 stubserver.cpp $SERVER_LIBS -o stubserver

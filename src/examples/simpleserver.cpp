@@ -6,12 +6,12 @@
  */
 
 #include <iostream>
-#include <jsonrpccpp/server.h>
-#include <jsonrpccpp/server/connectors/httpserver.h>
+#include <jsonrpccppskale/server.h>
+#include <jsonrpccppskale/server/connectors/httpserver.h>
 #include <stdio.h>
 #include <string>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 class SampleServer : public AbstractServer<SampleServer> {
@@ -48,12 +48,12 @@ int main() {
     } else {
       cout << "Error starting Server" << endl;
     }
-  } catch (jsonrpc::JsonRpcException &e) {
+  } catch (jsonrpcskale::JsonRpcException &e) {
     cerr << e.what() << endl;
   }
   // curl --data
-  // "{\"jsonrpc\":\"2.0\",\"method\":\"sayHello\",\"id\":1,\"params\":{\"name\":\"peter\"}}"
+  // "{\"jsonrpcskale\":\"2.0\",\"method\":\"sayHello\",\"id\":1,\"params\":{\"name\":\"peter\"}}"
   // localhost:8383  curl --data
-  // "{\"jsonrpc\":\"2.0\",\"method\":\"notifyServer\", \"params\": null}"
+  // "{\"jsonrpcskale\":\"2.0\",\"method\":\"notifyServer\", \"params\": null}"
   // localhost:8383
 }

@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    stubclient.cpp
  * @date    01.05.2013
@@ -10,15 +10,15 @@
 #include <iostream>
 
 #include "gen/stubclient.h"
-#include <jsonrpccpp/client/connectors/httpclient.h>
+#include <jsonrpccppskale/client/connectors/httpclient.h>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 int main() {
   HttpClient httpclient("http://localhost:8383");
-  // StubClient c(httpclient, JSONRPC_CLIENT_V1); //json-rpc 1.0
-  StubClient c(httpclient, JSONRPC_CLIENT_V2); // json-rpc 2.0
+  // StubClient c(httpclient, JSONRPC_CLIENT_V1); //json-rpc-skale 1.0
+  StubClient c(httpclient, JSONRPC_CLIENT_V2); // json-rpc-skale 2.0
 
   try {
     cout << c.sayHello("Peter Knafl") << endl;

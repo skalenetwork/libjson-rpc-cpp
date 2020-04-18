@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    codegenerator.cpp
  * @date    3/21/2014
@@ -9,7 +9,7 @@
 
 #include "codegenerator.h"
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 CodeGenerator::CodeGenerator(const ::string &filename)

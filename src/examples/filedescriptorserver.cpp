@@ -8,7 +8,7 @@
 
 /*
  * This example demonstrate the use of simple file descriptor to connect
- * processes with jsonrpc.
+ * processes with jsonrpcskale.
  *
  * First create a named pipe:
  *
@@ -25,20 +25,20 @@
  * The way the standard output of the client is connected to the standard
  * input of the server, and /vice versa/.
  *
- * You can even launch the server in standalone and enter json-rpc
+ * You can even launch the server in standalone and enter json-rpc-skale
  * compliant json string in the standard input to test it.
  */
 
 #include <iostream>
-#include <jsonrpccpp/server.h>
-#include <jsonrpccpp/server/connectors/filedescriptorserver.h>
+#include <jsonrpccppskale/server.h>
+#include <jsonrpccppskale/server/connectors/filedescriptorserver.h>
 #include <stdio.h>
 #include <string>
 #include <unistd.h>
 
 #define DELIMITER_CHAR char(0x0A)
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 class SampleServer : public AbstractServer<SampleServer> {
@@ -76,7 +76,7 @@ int main() {
     } else {
       cerr << "Error starting Server" << endl;
     }
-  } catch (jsonrpc::JsonRpcException &e) {
+  } catch (jsonrpcskale::JsonRpcException &e) {
     cerr << e.what() << endl;
   }
 }

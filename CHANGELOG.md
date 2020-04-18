@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - The `HttpServer` connector now has a `BindLocalhost` method (#261)
 
 ### Fixed
-- Don't precompress and honor GnuInstallDir for manpage of jsonrpcstub (#252)
+- Don't precompress and honor GnuInstallDir for manpage of jsonrpcskalestub (#252)
 - Arch Linux CI build (base image changed)
 - brew CI build (no longer has `--ssl` flag for libmicrohttpd)
 - Catching `Jsoncpp::Exception` for `.parse()` invocations
@@ -115,10 +115,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - unnecessary rebuilds of stubs on each `make` call.
 
 ### Added
-- `--version` option to jsonrpcstub.
+- `--version` option to jsonrpcskalestub.
 - msvc support.
 - data field support for JsonRpcException.
-- contributions guide: https://github.com/cinemast/libjson-rpc-cpp#contributions
+- contributions guide: https://github.com/cinemast/libjson-rpc-skale-cpp#contributions
 - HttpClient uses Http Keep-Alive, which improves performance drastically.
 - multiarch support.
 
@@ -137,7 +137,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v0.4.1] - 2014-12-01
 ### Added
 - coverity scan support
-- [API compatibility report](http://upstream.rosalinux.ru/versions/libjson-rpc-cpp.html)
+- [API compatibility report](http://upstream.rosalinux.ru/versions/libjson-rpc-skale-cpp.html)
 - Stubgenerator option for protocol switches (JSON-RPC 1.0 & 2.0)
 
 ### Changed
@@ -185,7 +185,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.3] - 2014-10-19
 ### Fixed
-- Renamed .so files to avoid collisions with makerbot's libjsonrpc.
+- Renamed .so files to avoid collisions with makerbot's libjsonrpcskale.
 - Invalid Batchcalls in Client and Server caused runtime exceptions.
 
 ### Added
@@ -202,7 +202,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # [v0.2.1] - 2013-07-27
 ### Added
-- Support for positional parameters. (see at [example specification](https://github.com/cinemast/libjson-rpc-cpp/blob/master/src/example/spec.json) how to declare them)
+- Support for positional parameters. (see at [example specification](https://github.com/cinemast/libjson-rpc-skale-cpp/blob/master/src/example/spec.json) how to declare them)
 
 ## [0.2] - 2013-05-29
 ### Fixed

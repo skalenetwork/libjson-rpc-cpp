@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    test_connector_unixdomainsocket.cpp
  * @date    6/8/2015
@@ -10,13 +10,13 @@
 #ifdef UNIXDOMAINSOCKET_TESTING
 #include "mockclientconnectionhandler.h"
 #include <catch2/catch.hpp>
-#include <jsonrpccpp/client/connectors/unixdomainsocketclient.h>
-#include <jsonrpccpp/server/connectors/unixdomainsocketserver.h>
+#include <jsonrpccppskale/client/connectors/unixdomainsocketclient.h>
+#include <jsonrpccppskale/server/connectors/unixdomainsocketserver.h>
 
 #include "checkexception.h"
 #include <iostream>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 #define TEST_MODULE "[connector_unixdomainsocket]"

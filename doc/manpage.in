@@ -1,11 +1,11 @@
-.\" Manpage for jsonrpcstub.
+.\" Manpage for jsonrpcskalestub.
 .\" Contact psk@autistici.org to correct errors or typos.
-.TH man 1 "22 April 2017" "@MAJOR_VERSION@.@MINOR_VERSION@.@PATCH_VERSION@" "jsonrpcstub man page"
+.TH man 1 "22 April 2017" "@MAJOR_VERSION@.@MINOR_VERSION@.@PATCH_VERSION@" "jsonrpcskalestub man page"
 .SH NAME
-jsonrpcstub \- genearate stubs for the libjson\-rpc\-cpp framework.
+jsonrpcskalestub \- genearate stubs for the libjson\-rpc\-cpp framework.
 .SH SYNOPSIS
 .B
-jsonrpcstub specfile.json [\-\-cpp\-server=namespace::ClassName]
+jsonrpcskalestub specfile.json [\-\-cpp\-server=namespace::ClassName]
  [\-\-cpp\-server\-file=classqname.h]  [\-\-cpp\-client=namespace::ClassName]
 [\-\-cpp\-client-file=classname.h] [\-\-js\-client=ClassName]
 [\-\-js-client-file=classname.js]  [\-\-py\-client=ClassName]
@@ -14,7 +14,7 @@ jsonrpcstub specfile.json [\-\-cpp\-server=namespace::ClassName]
 
 .SH DESCRIPTION
 .PP
-jsonrpcstub is a tool to generate C++, JavaScript, and Python classes from a procedure specification file.
+jsonrpcskalestub is a tool to generate C++, JavaScript, and Python classes from a procedure specification file.
 .SS SPECIFICATION SYNTAX
 .PP
 The specifictaion file is a JSON file containing all available JSON\-RPC methods and notifications
@@ -77,19 +77,19 @@ If this is not provided, the lowercase classname is used.
 Generate C++ Stubs for Server and Client, the classes will be named AbstractStubServer and StubClient:
 .IP
 .B
-\&jsonrpcstub spec.json \-\-cpp\-server=AbstractStubServer \-\-cpp\-client=StubClient
+\&jsonrpcskalestub spec.json \-\-cpp\-server=AbstractStubServer \-\-cpp\-client=StubClient
 .B
 .PP
 Generate JavaScript Client class MyRpcClient into file someclient.js:
 .IP
 .B
-\&jsonrpcstub spec.json \-\-js\-client=MyRpcClient \-\-js\-client\-file=someclient.js
+\&jsonrpcskalestub spec.json \-\-js\-client=MyRpcClient \-\-js\-client\-file=someclient.js
 .B
 .PP
 Generate Python client class StubClient, which will be saved into stubclient.py
 .IP
 .B
-\&jsonrpcstub spec.json \-\-py\-client=StubClient
+\&jsonrpcskalestub spec.json \-\-py\-client=StubClient
 .B
 .PP
 

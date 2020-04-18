@@ -6,10 +6,10 @@
  */
 
 #include <iostream>
-#include <jsonrpccpp/client.h>
-#include <jsonrpccpp/client/connectors/httpclient.h>
+#include <jsonrpccppskale/client.h>
+#include <jsonrpccppskale/client/connectors/httpclient.h>
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 int main() {

@@ -7,18 +7,18 @@ include_directories(${CMAKE_BINARY_DIR})
 
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/gen/abstractstubserver.h
-    COMMAND jsonrpcstub ARGS ${CMAKE_CURRENT_SOURCE_DIR}/spec.json --cpp-server=AbstractStubServer --cpp-server-file=${CMAKE_BINARY_DIR}/gen/abstractstubserver.h
+    COMMAND jsonrpcskalestub ARGS ${CMAKE_CURRENT_SOURCE_DIR}/spec.json --cpp-server=AbstractStubServer --cpp-server-file=${CMAKE_BINARY_DIR}/gen/abstractstubserver.h
     MAIN_DEPENDENCY spec.json
-    DEPENDS jsonrpcstub
+    DEPENDS jsonrpcskalestub
     COMMENT "Generating Server Stubfiles"
     VERBATIM
 )
 
 add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/gen/stubclient.h
-    COMMAND jsonrpcstub ARGS ${CMAKE_CURRENT_SOURCE_DIR}/spec.json --cpp-client=StubClient --cpp-client-file=${CMAKE_BINARY_DIR}/gen/stubclient.h
+    COMMAND jsonrpcskalestub ARGS ${CMAKE_CURRENT_SOURCE_DIR}/spec.json --cpp-client=StubClient --cpp-client-file=${CMAKE_BINARY_DIR}/gen/stubclient.h
     MAIN_DEPENDENCY spec.json
-    DEPENDS jsonrpcstub
+    DEPENDS jsonrpcskalestub
     COMMENT "Generating Client Stubfile"
     VERBATIM
 )
@@ -62,9 +62,9 @@ if(COMPILE_STUBGEN)
 endif()
 
 add_executable(unit_testsuite ${test_source})
-target_link_libraries(unit_testsuite jsonrpccommon)
-target_link_libraries(unit_testsuite jsonrpcserver)
-target_link_libraries(unit_testsuite jsonrpcclient)
+target_link_libraries(unit_testsuite jsonrpcskalecommon)
+target_link_libraries(unit_testsuite jsonrpcskaleserver)
+target_link_libraries(unit_testsuite jsonrpcskaleclient)
 
 if (NOT CATCH_FOUND)
     # let's wait for catch files to be downloaded
@@ -72,8 +72,8 @@ if (NOT CATCH_FOUND)
 endif()
 
 if(COMPILE_STUBGEN)
-    target_link_libraries(unit_testsuite libjsonrpcstub)
-    add_dependencies(unit_testsuite libjsonrpcstub)
+    target_link_libraries(unit_testsuite libjsonrpcskalestub)
+    add_dependencies(unit_testsuite libjsonrpcskalestub)
 endif()
 
 add_test(client ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/unit_testsuite "[client]")

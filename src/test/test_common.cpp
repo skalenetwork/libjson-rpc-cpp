@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    test_common.cpp
  * @date    28.09.2013
@@ -9,14 +9,14 @@
 
 #include "checkexception.h"
 #include <catch/catch.hpp>
-#include <jsonrpccpp/common/exception.h>
-#include <jsonrpccpp/common/procedure.h>
-#include <jsonrpccpp/common/specificationparser.h>
-#include <jsonrpccpp/common/specificationwriter.h>
+#include <jsonrpccppskale/common/exception.h>
+#include <jsonrpccppskale/common/procedure.h>
+#include <jsonrpccppskale/common/specificationparser.h>
+#include <jsonrpccppskale/common/specificationwriter.h>
 
 #define TEST_MODULE "[common]"
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 namespace testcommon {

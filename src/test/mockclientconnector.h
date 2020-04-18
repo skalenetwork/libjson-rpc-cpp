@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    mockclientconnector.h
  * @date    10/9/2014
@@ -10,9 +10,9 @@
 #ifndef JSONRPC_MOCKCLIENTCONNECTOR_H
 #define JSONRPC_MOCKCLIENTCONNECTOR_H
 
-#include <jsonrpccpp/client/iclientconnector.h>
+#include <jsonrpccppskale/client/iclientconnector.h>
 
-namespace jsonrpc {
+namespace jsonrpcskale {
 
     class MockClientConnector : public IClientConnector
     {
@@ -30,6 +30,6 @@ namespace jsonrpc {
             std::string request;
     };
 
-} // namespace jsonrpc
+} // namespace jsonrpcskale
 
 #endif // JSONRPC_MOCKCLIENTCONNECTOR_H

@@ -1,0 +1,246 @@
+# setup common headers and sources
+file(GLOB jsonrpcskale_header *.h)
+file(GLOB jsonrpcskale_header_common common/*.h)
+file(GLOB jsonrpcskale_source_common common/*.c*)
+
+# setup server headers and sources
+file(GLOB jsonrpcskale_install_header_server
+	server/requesthandlerfactory.h
+	server/abstractserver.h
+	server/abstractserverconnector.h
+        server/abstractthreadedserver.h
+	server/iprocedureinvokationhandler.h
+	server/iclientconnectionhandler.h
+        server/threadpool.h
+)
+file(GLOB jsonrpcskale_header_server server/*.h)
+file(GLOB jsonrpcskale_source_server server/*.c*)
+
+# setup client headers and sources
+file(GLOB jsonrpcskale_install_header_client
+    client/batchcall.h
+    client/batchresponse.h
+    client/client.h
+    client/iclientconnector.h
+)
+file(GLOB jsonrpcskale_header_client client/*.h)
+file(GLOB jsonrpcskale_source_client client/*.c*)
+
+# setup connector variables defaults
+set(client_connector_source "")
+set(client_connector_header "")
+set(client_connector_libs   "")
+set(server_connector_source "")
+set(server_connector_header "")
+set(server_connector_libs   "")
+set(SERVER_LIBS "")
+set(CLIENT_LIBS "")
+
+# setup sources for http connectors
+if (HTTP_CLIENT)
+	list(APPEND client_connector_header "client/connectors/httpclient.h")
+	list(APPEND client_connector_source "client/connectors/httpclient.cpp")
+    list(APPEND client_connector_libs ${CURL_LIBRARIES})
+    set(CLIENT_LIBS "${CLIENT_LIBS} -lcurl")
+endif()
+
+if (HTTP_SERVER)
+	list(APPEND server_connector_header "server/connectors/httpserver.h")
+	list(APPEND server_connector_source "server/connectors/httpserver.cpp")
+    list(APPEND server_connector_libs ${CMAKE_THREAD_LIBS_INIT} ${MHD_LIBRARIES})
+    set(SERVER_LIBS "${SERVER_LIBS} -lmicrohttpd")
+endif()
+
+# setup sources for redis connectors
+if (REDIS_CLIENT)
+    list(APPEND client_connector_header "client/connectors/redisclient.h")
+    list(APPEND client_connector_source "client/connectors/redisclient.cpp")
+    list(APPEND client_connector_libs ${HIREDIS_LIBRARIES})
+    include_directories(${HIREDIS_INCLUDE_DIRS})
+    set(CLIENT_LIBS "${CLIENT_LIBS} -lhiredis")
+endif()
+
+if (REDIS_SERVER)
+    list(APPEND server_connector_header "server/connectors/redisserver.h")
+    list(APPEND server_connector_source "server/connectors/redisserver.cpp")
+    list(APPEND server_connector_libs ${CMAKE_THREAD_LIBS_INIT} ${HIREDIS_LIBRARIES})
+    set(SERVER_LIBS "${SERVER_LIBS} -lhiredis")
+endif()
+
+# setup sources for unix domain socket connectors
+if (UNIX_DOMAIN_SOCKET_SERVER)
+    list(APPEND server_connector_header "server/connectors/unixdomainsocketserver.h")
+    list(APPEND server_connector_source "server/connectors/unixdomainsocketserver.cpp")
+    list(APPEND server_connector_libs ${CMAKE_THREAD_LIBS_INIT})
+endif()
+
+if (UNIX_DOMAIN_SOCKET_CLIENT)
+    list(APPEND client_connector_header "client/connectors/unixdomainsocketclient.h")
+    list(APPEND client_connector_source "client/connectors/unixdomainsocketclient.cpp")
+endif()
+
+# setup sources for tcp socket connectors
+if (TCP_SOCKET_SERVER)
+    list(APPEND server_connector_header "server/connectors/tcpsocketserver.h")
+    list(APPEND server_connector_source "server/connectors/tcpsocketserver.cpp")
+    if (WIN32)
+        list(APPEND server_connector_header "server/connectors/windowstcpsocketserver.h")
+        list(APPEND server_connector_source "server/connectors/windowstcpsocketserver.cpp")
+        list(APPEND server_connector_libs ws2_32)
+    endif()
+    if(UNIX)
+        list(APPEND server_connector_header "server/connectors/linuxtcpsocketserver.h")
+        list(APPEND server_connector_source "server/connectors/linuxtcpsocketserver.cpp")
+    endif()
+    list(APPEND server_connector_libs ${CMAKE_THREAD_LIBS_INIT})
+endif()
+
+if (TCP_SOCKET_CLIENT)
+    list(APPEND client_connector_header "client/connectors/tcpsocketclient.h")
+    list(APPEND client_connector_source "client/connectors/tcpsocketclient.cpp")
+    if (WIN32)
+        list(APPEND client_connector_header "client/connectors/windowstcpsocketclient.h")
+        list(APPEND client_connector_source "client/connectors/windowstcpsocketclient.cpp")
+        list(APPEND client_connector_libs ws2_32)
+    endif()
+    if(UNIX)
+        list(APPEND client_connector_header "client/connectors/linuxtcpsocketclient.h")
+        list(APPEND client_connector_source "client/connectors/linuxtcpsocketclient.cpp")
+    endif()
+    list(APPEND client_connector_libs ${CMAKE_THREAD_LIBS_INIT})
+endif()
+
+if (FILE_DESCRIPTOR_SERVER)
+    list(APPEND server_connector_header "server/connectors/filedescriptorserver.h")
+    list(APPEND server_connector_source "server/connectors/filedescriptorserver.cpp")
+    list(APPEND server_connector_libs ${CMAKE_THREAD_LIBS_INIT})
+endif()
+
+if (FILE_DESCRIPTOR_CLIENT)
+    list(APPEND client_connector_header "client/connectors/filedescriptorclient.h")
+    list(APPEND client_connector_source "client/connectors/filedescriptorclient.cpp")
+    list(APPEND client_connector_libs ${CMAKE_THREAD_LIBS_INIT})
+endif()
+
+# configure a header file to pass some of the CMake settings to the source code
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/gen/jsonrpccppskale/common")
+configure_file("${PROJECT_SOURCE_DIR}/src/jsonrpccppskale/version.h.in" "${CMAKE_BINARY_DIR}/gen/jsonrpccppskale/version.h")
+configure_file("${PROJECT_SOURCE_DIR}/src/jsonrpccppskale/common/jsonparser.h.in" "${CMAKE_BINARY_DIR}/gen/jsonrpccppskale/common/jsonparser.h")
+
+install(FILES "${CMAKE_BINARY_DIR}/gen/jsonrpccppskale/version.h" DESTINATION include/jsonrpccppskale)
+install(FILES "${PROJECT_BINARY_DIR}/gen/jsonrpccppskale/common/jsonparser.h" DESTINATION include/jsonrpccppskale/common)
+
+# include required directories
+include_directories(..)
+include_directories(${MHD_INCLUDE_DIRS})
+
+# setup shared common library
+if (BUILD_SHARED_LIBS)
+	add_library(jsonrpcskalecommon SHARED ${jsonrpcskale_source_common} ${jsonrpcskale_header} ${jsonrpcskale_helper_source_common})
+	target_link_libraries(jsonrpcskalecommon ${JSONCPP_LIBRARY})
+	set_target_properties(jsonrpcskalecommon PROPERTIES OUTPUT_NAME jsonrpccppskale-common)
+endif()
+
+# setup static common library
+if (BUILD_STATIC_LIBS OR MSVC)
+	add_library(common STATIC ${jsonrpcskale_source_common} ${jsonrpcskale_header} ${jsonrpcskale_helper_source_common})
+	target_link_libraries(common jsoncpp_lib_static)
+	set_target_properties(common PROPERTIES OUTPUT_NAME jsonrpccppskale-common)
+
+	if (NOT BUILD_SHARED_LIBS)
+		add_library(jsonrpcskalecommon ALIAS common)
+	endif()
+endif()
+
+# setup shared client library
+if (BUILD_SHARED_LIBS)
+    add_library(jsonrpcskaleclient SHARED ${jsonrpcskale_source_client} ${jsonrpcskale_header} ${jsonrpcskale_header_client} ${client_connector_source})
+    add_dependencies(jsonrpcskaleclient jsonrpcskalecommon)
+    target_link_libraries(jsonrpcskaleclient jsonrpcskalecommon ${client_connector_libs})
+    set_target_properties(jsonrpcskaleclient PROPERTIES OUTPUT_NAME jsonrpccppskale-client)
+endif()
+
+# setup static client library
+if (BUILD_STATIC_LIBS OR MSVC)
+	add_library(client STATIC ${jsonrpcskale_source_client} ${jsonrpcskale_header} ${jsonrpcskale_header_client} ${client_connector_source})
+	target_link_libraries(client common ${client_connector_libs})
+	set_target_properties(client PROPERTIES OUTPUT_NAME jsonrpccppskale-client)
+
+	if (NOT BUILD_SHARED_LIBS)
+		add_library(jsonrpcskaleclient ALIAS client)
+	endif()
+endif()
+
+# setup shared server library
+if (BUILD_SHARED_LIBS)
+    add_library(jsonrpcskaleserver SHARED ${jsonrpcskale_source_server} ${jsonrpcskale_header} ${jsonrpcskale_header_server} ${server_connector_source})
+    add_dependencies(jsonrpcskaleserver jsonrpcskalecommon)
+    target_link_libraries(jsonrpcskaleserver jsonrpcskalecommon ${server_connector_libs})
+    set_target_properties(jsonrpcskaleserver PROPERTIES OUTPUT_NAME jsonrpccppskale-server)
+endif()
+
+# setup static server library
+if (BUILD_STATIC_LIBS OR MSVC)
+	add_library(server STATIC ${jsonrpcskale_source_server} ${jsonrpcskale_header} ${jsonrpcskale_header_server} ${server_connector_source})
+	target_link_libraries(server common ${server_connector_libs})
+	set_target_properties(server PROPERTIES OUTPUT_NAME jsonrpccppskale-server)
+
+	if (NOT BUILD_SHARED_LIBS)
+		add_library(jsonrpcskaleserver ALIAS server)
+	endif()
+endif()
+
+set(ALL_LIBS)
+
+if (BUILD_SHARED_LIBS OR NOT BUILD_STATIC_LIBS)
+    list(APPEND ALL_LIBS jsonrpcskalecommon jsonrpcskaleclient jsonrpcskaleserver)
+endif()
+
+if (BUILD_STATIC_LIBS OR MSVC)
+	list(APPEND ALL_LIBS common client server)
+endif()
+
+# setup version
+set(VERSION_STRING ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
+set_target_properties(
+	${ALL_LIBS}
+	PROPERTIES VERSION "${VERSION_STRING}" SOVERSION "${SO_VERSION}"
+)
+
+# install libraries
+install(FILES ${jsonrpcskale_header}                 DESTINATION include/jsonrpccppskale)
+install(FILES ${jsonrpcskale_header_common}          DESTINATION include/jsonrpccppskale/common)
+install(FILES ${jsonrpcskale_helper_header_common}   DESTINATION include/jsonrpccppskale/common/helper)
+install(FILES ${jsonrpcskale_install_header_client}  DESTINATION include/jsonrpccppskale/client)
+install(FILES ${jsonrpcskale_install_header_server}  DESTINATION include/jsonrpccppskale/server)
+install(FILES ${client_connector_header}        DESTINATION include/jsonrpccppskale/client/connectors)
+install(FILES ${server_connector_header}        DESTINATION include/jsonrpccppskale/server/connectors)
+
+if (WIN32 AND NOT HUNTER_ENABLED)
+	# On Windows copy manually installed dependencies unless Hunter is used.
+	file(GLOB win32_libs ${CMAKE_SOURCE_DIR}/win32-deps/lib/*.dll)
+	file(COPY ${win32_libs} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+	install(FILES ${win32_libs} DESTINATION bin)
+	install(DIRECTORY ${CMAKE_SOURCE_DIR}/win32-deps/include DESTINATION .)
+endif()
+
+install(TARGETS ${ALL_LIBS} EXPORT libjson-rpc-skale-cppTargets
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION bin
+)
+
+#set pkg-config
+get_filename_component(FULL_PATH_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" ABSOLUTE)
+set(FULL_PATH_INCLUDEDIR "${FULL_PATH_INSTALL_PREFIX}/include")
+set(FULL_PATH_LIBDIR "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+
+configure_file(${PROJECT_SOURCE_DIR}/cmake/libjsonrpccppskale-client.pc.cmake ${CMAKE_BINARY_DIR}/libjsonrpccppskale-client.pc)
+configure_file(${PROJECT_SOURCE_DIR}/cmake/libjsonrpccppskale-server.pc.cmake ${CMAKE_BINARY_DIR}/libjsonrpccppskale-server.pc)
+configure_file(${PROJECT_SOURCE_DIR}/cmake/libjsonrpccppskale-common.pc.cmake ${CMAKE_BINARY_DIR}/libjsonrpccppskale-common.pc)
+
+INSTALL(FILES
+    "${CMAKE_BINARY_DIR}/libjsonrpccppskale-server.pc"
+    "${CMAKE_BINARY_DIR}/libjsonrpccppskale-client.pc"
+    "${CMAKE_BINARY_DIR}/libjsonrpccppskale-common.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")

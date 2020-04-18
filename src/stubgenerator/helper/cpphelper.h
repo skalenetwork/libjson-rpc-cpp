@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    cpphelper.h
  * @date    29.09.2013
@@ -12,10 +12,10 @@
 
 #include <string>
 #include <vector>
-#include <jsonrpccpp/common/procedure.h>
+#include <jsonrpccppskale/common/procedure.h>
 #include "../codegenerator.h"
 
-namespace jsonrpc
+namespace jsonrpcskale
 {
     class CPPHelper
     {

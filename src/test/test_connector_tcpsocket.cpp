@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-cpp
+ * libjson-rpc-skale-cpp
  *************************************************************************
  * @file    test_connector_tcpsocket.cpp
  * @date    27/07/2015
@@ -10,12 +10,12 @@
 #ifdef TCPSOCKET_TESTING
 #include "mockclientconnectionhandler.h"
 #include <catch2/catch.hpp>
-#include <jsonrpccpp/client/connectors/tcpsocketclient.h>
-#include <jsonrpccpp/server/connectors/tcpsocketserver.h>
+#include <jsonrpccppskale/client/connectors/tcpsocketclient.h>
+#include <jsonrpccppskale/server/connectors/tcpsocketserver.h>
 
 #include "checkexception.h"
 
-using namespace jsonrpc;
+using namespace jsonrpcskale;
 using namespace std;
 
 #ifndef DELIMITER_CHAR
