@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file testserver.h
  * @date    08.03.2013
@@ -10,16 +10,16 @@
 #ifndef JSONRPC_CPP_SERVER_H
 #define JSONRPC_CPP_SERVER_H
 
-#include <jsonrpccppskale/server.h>
-#include <jsonrpccppskale/client.h>
+#include <jsonrpccpp/server.h>
+#include <jsonrpccpp/client.h>
 
 //Methods
-namespace jsonrpcskale
+namespace jsonrpc
 {
-    class TestServer : public jsonrpcskale::AbstractServer<TestServer>
+    class TestServer : public jsonrpc::AbstractServer<TestServer>
     {
         public:
-            TestServer(jsonrpcskale::AbstractServerConnector &connector, jsonrpcskale::serverVersion_t type = jsonrpcskale::JSONRPC_SERVER_V2);
+            TestServer(jsonrpc::AbstractServerConnector &connector, jsonrpc::serverVersion_t type = jsonrpc::JSONRPC_SERVER_V2);
 
             void sayHello(const Json::Value& request, Json::Value& response);
             void getCounterValue(const Json::Value& request, Json::Value& response);

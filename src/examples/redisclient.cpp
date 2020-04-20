@@ -6,11 +6,11 @@
  */
 
 #include <iostream>
-#include <jsonrpccppskale/client.h>
-#include <jsonrpccppskale/client/connectors/redisclient.h>
+#include <jsonrpccpp/client.h>
+#include <jsonrpccpp/client/connectors/redisclient.h>
 #include <unistd.h>
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 int main() {

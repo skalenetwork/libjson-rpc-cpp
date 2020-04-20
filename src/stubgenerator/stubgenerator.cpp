@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    stubgenerator.cpp
  * @date    01.05.2013
@@ -9,7 +9,7 @@
 
 #include <algorithm>
 #include <fstream>
-#include <jsonrpccppskale/common/specificationparser.h>
+#include <jsonrpccpp/common/specificationparser.h>
 
 #include <argtable2.h>
 
@@ -21,7 +21,7 @@
 #include "stubgenerator.h"
 
 using namespace std;
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 
 #define EXIT_ERROR(X)                                                          \
   cerr << X << endl;                                                           \

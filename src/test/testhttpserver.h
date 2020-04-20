@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    testhttpserver.h
  * @date    11/16/2014
@@ -10,11 +10,11 @@
 #ifndef JSONRPC_TESTHTTPSERVER_H
 #define JSONRPC_TESTHTTPSERVER_H
 
-#include <jsonrpccppskale/server/abstractserverconnector.h>
-#include <jsonrpccppskale/server/connectors/httpserver.h>
+#include <jsonrpccpp/server/abstractserverconnector.h>
+#include <jsonrpccpp/server/connectors/httpserver.h>
 #include <map>
 
-namespace jsonrpcskale {
+namespace jsonrpc {
 
     class TestHttpServer : public AbstractServerConnector
     {
@@ -41,6 +41,6 @@ namespace jsonrpcskale {
             static int header_iterator (void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
     };
 
-} // namespace jsonrpcskale
+} // namespace jsonrpc
 
 #endif // JSONRPC_TESTHTTPSERVER_H

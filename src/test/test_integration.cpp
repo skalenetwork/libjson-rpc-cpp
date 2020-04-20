@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    test_integration.cpp
  * @date    28.09.2013
@@ -11,14 +11,14 @@
 #include <catch2/catch.hpp>
 
 #ifdef HTTP_TESTING
-#include <jsonrpccppskale/client/connectors/httpclient.h>
-#include <jsonrpccppskale/server/connectors/httpserver.h>
+#include <jsonrpccpp/client/connectors/httpclient.h>
+#include <jsonrpccpp/server/connectors/httpserver.h>
 #endif
 
 #include "gen/abstractstubserver.h"
 #include "gen/stubclient.h"
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 #define TEST_PORT 8484
@@ -107,8 +107,8 @@ TEST_CASE("test_integration_http", TEST_MODULE) {
 #endif
 #ifdef UNIXDOMAINSOCKET_TESTING
 
-#include <jsonrpccppskale/client/connectors/unixdomainsocketclient.h>
-#include <jsonrpccppskale/server/connectors/unixdomainsocketserver.h>
+#include <jsonrpccpp/client/connectors/unixdomainsocketclient.h>
+#include <jsonrpccpp/server/connectors/unixdomainsocketserver.h>
 
 TEST_CASE("test_integration_unixdomain", TEST_MODULE) {
   string filename = "/tmp/jrpcux_" + rand_alnum_str(10);
@@ -138,8 +138,8 @@ TEST_CASE("test_integration_unixdomain", TEST_MODULE) {
 #endif
 #ifdef FILEDESCRIPTOR_TESTING
 
-#include <jsonrpccppskale/client/connectors/filedescriptorclient.h>
-#include <jsonrpccppskale/server/connectors/filedescriptorserver.h>
+#include <jsonrpccpp/client/connectors/filedescriptorclient.h>
+#include <jsonrpccpp/server/connectors/filedescriptorserver.h>
 #include <unistd.h>
 
 TEST_CASE("test_integration_filedescriptor", TEST_MODULE) {

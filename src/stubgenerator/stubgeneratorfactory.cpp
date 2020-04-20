@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    stubgeneratorfactory.cpp
  * @date    11/19/2014
@@ -15,10 +15,10 @@
 #include "server/cppserverstubgenerator.h"
 #include <argtable2.h>
 #include <iostream>
-#include <jsonrpccppskale/common/specificationparser.h>
-#include <jsonrpccppskale/version.h>
+#include <jsonrpccpp/common/specificationparser.h>
+#include <jsonrpccpp/version.h>
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 bool StubGeneratorFactory::createStubGenerators(
@@ -76,7 +76,7 @@ bool StubGeneratorFactory::createStubGenerators(
   }
 
   if (version->count > 0) {
-    fprintf(_stdout, "jsonrpcskalestub version %d.%d.%d\n", JSONRPC_CPP_MAJOR_VERSION,
+    fprintf(_stdout, "jsonrpcstub version %d.%d.%d\n", JSONRPC_CPP_MAJOR_VERSION,
             JSONRPC_CPP_MINOR_VERSION, JSONRPC_CPP_PATCH_VERSION);
     arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
     return true;

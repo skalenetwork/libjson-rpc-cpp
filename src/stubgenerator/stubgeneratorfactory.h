@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    stubgeneratorfactory.h
  * @date    11/19/2014
@@ -13,7 +13,7 @@
 #include <vector>
 #include "stubgenerator.h"
 
-namespace jsonrpcskale {
+namespace jsonrpc {
 
     class StubGeneratorFactory
     {
@@ -22,6 +22,6 @@ namespace jsonrpcskale {
             static void deleteStubGenerators(std::vector<StubGenerator*> &stubgenerators);
     };
 
-} // namespace jsonrpcskale
+} // namespace jsonrpc
 
 #endif // JSONRPC_CPP_STUBGENERATORFACTORY_H

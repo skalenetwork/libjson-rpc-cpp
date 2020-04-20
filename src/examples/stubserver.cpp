@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    stubserver.cpp
  * @date    02.05.2013
@@ -9,10 +9,10 @@
 #include <iostream>
 
 #include "gen/abstractstubserver.h"
-#include <jsonrpccppskale/server/connectors/httpserver.h>
+#include <jsonrpccpp/server/connectors/httpserver.h>
 #include <stdio.h>
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 class MyStubServer : public AbstractStubServer {
@@ -107,7 +107,7 @@ string MyStubServer::methodWithoutParameters() { return "Test"; }
 int main() {
   HttpServer httpserver(8383);
   MyStubServer s(httpserver,
-                 JSONRPC_SERVER_V1V2); // hybrid server (json-rpc-skale 1.0 & 2.0)
+                 JSONRPC_SERVER_V1V2); // hybrid server (json-rpc 1.0 & 2.0)
   s.StartListening();
   cout << "Hit enter to stop the server" << endl;
   getchar();

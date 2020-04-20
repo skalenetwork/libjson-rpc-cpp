@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    test_connector_http.cpp
  * @date    28.09.2013
@@ -10,7 +10,7 @@
 #ifdef STUBGEN_TESTING
 #include <catch2/catch.hpp>
 
-#include <jsonrpccppskale/common/specificationparser.h>
+#include <jsonrpccpp/common/specificationparser.h>
 #include <stubgenerator/client/cppclientstubgenerator.h>
 #include <stubgenerator/client/jsclientstubgenerator.h>
 #include <stubgenerator/client/pyclientstubgenerator.h>
@@ -20,7 +20,7 @@
 
 #include <sstream>
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 namespace teststubgen {
@@ -60,7 +60,7 @@ TEST_CASE("test stubgen cppclient", TEST_MODULE) {
         string::npos);
   CHECK(result.find("namespace ns1") != string::npos);
   CHECK(result.find("namespace ns2") != string::npos);
-  CHECK(result.find("class TestStubClient : public jsonrpcskale::Client") !=
+  CHECK(result.find("class TestStubClient : public jsonrpc::Client") !=
         string::npos);
   CHECK(result.find("std::string test_method(const std::string& name) ") !=
         string::npos);
@@ -92,7 +92,7 @@ TEST_CASE("test stubgen cppserver", TEST_MODULE) {
   CHECK(result.find("namespace ns1") != string::npos);
   CHECK(result.find("namespace ns2") != string::npos);
   CHECK(result.find("class TestStubServer : public "
-                    "jsonrpcskale::AbstractServer<TestStubServer>") != string::npos);
+                    "jsonrpc::AbstractServer<TestStubServer>") != string::npos);
   CHECK(result.find(
             "virtual std::string test_method(const std::string& name) = 0;") !=
         string::npos);
@@ -103,9 +103,9 @@ TEST_CASE("test stubgen cppserver", TEST_MODULE) {
                     "const Json::Value& values) = 0;") != string::npos);
   CHECK(result.find("virtual void test_notification2(const Json::Value& "
                     "object, const Json::Value& values) = 0;") != string::npos);
-  CHECK(result.find("this->bindAndAddMethod(jsonrpcskale::Procedure(\"test.method\","
-                    " jsonrpcskale::PARAMS_BY_NAME, jsonrpcskale::JSON_STRING, "
-                    "\"name\",jsonrpcskale::JSON_STRING, NULL), "
+  CHECK(result.find("this->bindAndAddMethod(jsonrpc::Procedure(\"test.method\","
+                    " jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_STRING, "
+                    "\"name\",jsonrpc::JSON_STRING, NULL), "
                     "&ns1::ns2::TestStubServer::test_methodI);") !=
         string::npos);
   CHECK(result.find("inline virtual void test_notificationI("
@@ -157,7 +157,7 @@ TEST_CASE("test_stubgen_pyclient", TEST_MODULE) {
   stubgen.generateStub();
   string result = stream.str();
 
-  CHECK(result.find("from jsonrpcskale_pyclient import client") != string::npos);
+  CHECK(result.find("from jsonrpc_pyclient import client") != string::npos);
   CHECK(result.find("class TestStubClient(client.Client):") != string::npos);
   CHECK(result.find("def __init__(self, connector, version='2.0'):") !=
         string::npos);
@@ -188,7 +188,7 @@ TEST_CASE("test_stubgen_indentation", TEST_MODULE) {
 }
 
 TEST_CASE_METHOD(F, "test_stubgen_factory_help", TEST_MODULE) {
-  const char *argv[2] = {"jsonrpcskalestub", "-h"};
+  const char *argv[2] = {"jsonrpcstub", "-h"};
   CHECK(StubGeneratorFactory::createStubGenerators(
             2, (char **)argv, procedures, stubgens, stdout, stderr) == true);
   CHECK(stubgens.empty() == true);
@@ -196,7 +196,7 @@ TEST_CASE_METHOD(F, "test_stubgen_factory_help", TEST_MODULE) {
 }
 
 TEST_CASE_METHOD(F, "test_stubgen_factory_version", TEST_MODULE) {
-  const char *argv[2] = {"jsonrpcskalestub", "--version"};
+  const char *argv[2] = {"jsonrpcstub", "--version"};
 
   CHECK(StubGeneratorFactory::createStubGenerators(
             2, (char **)argv, procedures, stubgens, stdout, stderr) == true);
@@ -205,7 +205,7 @@ TEST_CASE_METHOD(F, "test_stubgen_factory_version", TEST_MODULE) {
 }
 
 TEST_CASE_METHOD(F, "test_stubgen_factory_error", TEST_MODULE) {
-  const char *argv[2] = {"jsonrpcskalestub", "--cpp-client=TestClient"};
+  const char *argv[2] = {"jsonrpcstub", "--cpp-client=TestClient"};
 
   CHECK(StubGeneratorFactory::createStubGenerators(
             2, (char **)argv, procedures, stubgens, stdout, stderr) == false);
@@ -214,7 +214,7 @@ TEST_CASE_METHOD(F, "test_stubgen_factory_error", TEST_MODULE) {
 
   vector<StubGenerator *> stubgens2;
   vector<Procedure> procedures2;
-  const char *argv2[2] = {"jsonrpcskalestub", "--cpxp-client=TestClient"};
+  const char *argv2[2] = {"jsonrpcstub", "--cpxp-client=TestClient"};
 
   CHECK(StubGeneratorFactory::createStubGenerators(2, (char **)argv2,
                                                    procedures2, stubgens2,
@@ -224,7 +224,7 @@ TEST_CASE_METHOD(F, "test_stubgen_factory_error", TEST_MODULE) {
 
   vector<StubGenerator *> stubgens3;
   vector<Procedure> procedures3;
-  const char *argv3[3] = {"jsonrpcskalestub", "testspec1.json",
+  const char *argv3[3] = {"jsonrpcstub", "testspec1.json",
                           "--cpp-client=TestClient"};
 
   CHECK(StubGeneratorFactory::createStubGenerators(3, (char **)argv3,
@@ -237,7 +237,7 @@ TEST_CASE_METHOD(F, "test_stubgen_factory_error", TEST_MODULE) {
 TEST_CASE_METHOD(F, "test_stubgen_factory_success", TEST_MODULE) {
   vector<StubGenerator *> stubgens;
   vector<Procedure> procedures;
-  const char *argv[5] = {"jsonrpcskalestub", "testspec6.json",
+  const char *argv[5] = {"jsonrpcstub", "testspec6.json",
                          "--js-client=TestClient", "--cpp-client=TestClient",
                          "--cpp-server=TestServer"};
 
@@ -252,7 +252,7 @@ TEST_CASE_METHOD(F, "test_stubgen_factory_success", TEST_MODULE) {
 TEST_CASE_METHOD(F, "test_stubgen_factory_fileoverride", TEST_MODULE) {
   vector<StubGenerator *> stubgens;
   vector<Procedure> procedures;
-  const char *argv[9] = {"jsonrpcskalestub",
+  const char *argv[9] = {"jsonrpcstub",
                          "testspec6.json",
                          "--js-client=TestClient",
                          "--cpp-client=TestClient",

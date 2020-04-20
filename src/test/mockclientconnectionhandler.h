@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    mockclientconnectionhandler.h
  * @date    10/29/2014
@@ -10,10 +10,10 @@
 #ifndef JSONRPC_CPP_MOCKCLIENTCONNECTIONHANDLER_H
 #define JSONRPC_CPP_MOCKCLIENTCONNECTIONHANDLER_H
 
-#include <jsonrpccppskale/server.h>
+#include <jsonrpccpp/server.h>
 #include <string>
 
-namespace jsonrpcskale
+namespace jsonrpc
 {
     class MockClientConnectionHandler : public IClientConnectionHandler
     {

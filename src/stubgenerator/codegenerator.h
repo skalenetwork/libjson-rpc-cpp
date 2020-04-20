@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    codegenerator.h
  * @date    3/21/2014
@@ -15,7 +15,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace jsonrpcskale
+namespace jsonrpc
 {
     class CodeGenerator
     {

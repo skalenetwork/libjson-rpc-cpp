@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    test_client.cpp
  * @date    28.09.2013
@@ -10,11 +10,11 @@
 #include "checkexception.h"
 #include "mockclientconnector.h"
 #include <catch/catch.hpp>
-#include <jsonrpccppskale/client.h>
+#include <jsonrpccpp/client.h>
 
 #define TEST_MODULE "[client]"
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 namespace testclient {
@@ -51,24 +51,24 @@ using namespace testclient;
 
 TEST_CASE_METHOD(F, "test_client_id", TEST_MODULE) {
   params.append(33);
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"id\": \"1\", \"result\": 23}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"id\": \"1\", \"result\": 23}");
   Json::Value response = client.CallMethod("abcd", params);
   CHECK(response.asInt() == 23);
 
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"result\": 24}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"id\": 1, \"result\": 24}");
   response = client.CallMethod("abcd", params);
   CHECK(response.asInt() == 24);
 }
 
 TEST_CASE_METHOD(F, "test_client_v2_method_success", TEST_MODULE) {
   params.append(23);
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"result\": 23}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"id\": 1, \"result\": 23}");
   Json::Value response = client.CallMethod("abcd", params);
   Json::Value v = c.GetJsonRequest();
 
   CHECK(v["method"].asString() == "abcd");
   CHECK(v["params"][0].asInt() == 23);
-  CHECK(v["jsonrpcskale"].asString() == "2.0");
+  CHECK(v["jsonrpc"].asString() == "2.0");
   CHECK(v["id"].asInt() == 1);
 }
 
@@ -79,12 +79,12 @@ TEST_CASE_METHOD(F, "test_client_v2_notification_success", TEST_MODULE) {
 
   CHECK(v["method"].asString() == "abcd");
   CHECK(v["params"][0].asInt() == 23);
-  CHECK(v["jsonrpcskale"].asString() == "2.0");
+  CHECK(v["jsonrpc"].asString() == "2.0");
   CHECK(v.isMember("id") == false);
 }
 
 TEST_CASE_METHOD(F, "test_client_v2_errorresponse", TEST_MODULE) {
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"error\": {\"code\": -32600, "
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"error\": {\"code\": -32600, "
                 "\"message\": \"Invalid Request\", \"data\": [1,2]}, \"id\": "
                 "null}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
@@ -98,26 +98,26 @@ TEST_CASE_METHOD(F, "test_client_v2_invalidjson", TEST_MODULE) {
 }
 
 TEST_CASE_METHOD(F, "test_client_v2_invalidresponse", TEST_MODULE) {
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"resulto\": 23}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"id\": 1, \"resulto\": 23}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"id2\": 1, \"result\": 23}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"id2\": 1, \"result\": 23}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
-  c.SetResponse("{\"jsonrpcskale\":\"1.0\", \"id\": 1, \"result\": 23}");
+  c.SetResponse("{\"jsonrpc\":\"1.0\", \"id\": 1, \"result\": 23}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
   c.SetResponse("{\"id\": 1, \"result\": 23}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
   c.SetResponse(
-      "{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"result\": 23, \"error\": {}}");
+      "{\"jsonrpc\":\"2.0\", \"id\": 1, \"result\": 23, \"error\": {}}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"error\": {}}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"id\": 1, \"error\": {}}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
-  c.SetResponse("{\"jsonrpcskale\":\"2.0\", \"result\": 23}");
+  c.SetResponse("{\"jsonrpc\":\"2.0\", \"result\": 23}");
   CHECK_EXCEPTION_TYPE(client.CallMethod("abcd", Json::nullValue),
                        JsonRpcException, check_exception2);
   c.SetResponse("{}");
@@ -137,8 +137,8 @@ TEST_CASE_METHOD(F, "test_client_v2_batchcall_success", TEST_MODULE) {
   CHECK(bc.addCall("def", Json::nullValue, true) == -1);
   CHECK(bc.addCall("abc", Json::nullValue, false) == 2);
 
-  c.SetResponse("[{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"result\": "
-                "23},{\"jsonrpcskale\":\"2.0\", \"id\": 2, \"result\": 24}]");
+  c.SetResponse("[{\"jsonrpc\":\"2.0\", \"id\": 1, \"result\": "
+                "23},{\"jsonrpc\":\"2.0\", \"id\": 2, \"result\": 24}]");
 
   BatchResponse response = client.CallProcedures(bc);
 
@@ -164,9 +164,9 @@ TEST_CASE_METHOD(F, "test_client_v2_batchcall_error", TEST_MODULE) {
   CHECK(bc.addCall("def", Json::nullValue, false) == 2);
   CHECK(bc.addCall("abc", Json::nullValue, false) == 3);
 
-  c.SetResponse("[{\"jsonrpcskale\":\"2.0\", \"id\": 1, \"result\": "
-                "23},{\"jsonrpcskale\":\"2.0\", \"id\": 2, \"error\": {\"code\": "
-                "-32001, \"message\": \"error1\"}},{\"jsonrpcskale\":\"2.0\", "
+  c.SetResponse("[{\"jsonrpc\":\"2.0\", \"id\": 1, \"result\": "
+                "23},{\"jsonrpc\":\"2.0\", \"id\": 2, \"error\": {\"code\": "
+                "-32001, \"message\": \"error1\"}},{\"jsonrpc\":\"2.0\", "
                 "\"id\": null, \"error\": {\"code\": -32002, \"message\": "
                 "\"error2\"}}]");
 
@@ -201,7 +201,7 @@ TEST_CASE_METHOD(F1, "test_client_v1_method_success", TEST_MODULE) {
 
   CHECK(v["method"].asString() == "abcd");
   CHECK(v["params"][0].asInt() == 23);
-  CHECK(v.isMember("jsonrpcskale") == false);
+  CHECK(v.isMember("jsonrpc") == false);
   CHECK(v["id"].asInt() == 1);
 
   CHECK(response.asInt() == 23);

@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    testhttpserver.cpp
  * @date    11/16/2014
@@ -9,7 +9,7 @@
 
 #include "testhttpserver.h"
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 
 TestHttpServer::TestHttpServer(int port) : port(port) {}
 

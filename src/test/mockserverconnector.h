@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    mockserverconnector.h
  * @date    10/10/2014
@@ -10,10 +10,10 @@
 #ifndef JSONRPC_MOCKSERVERCONNECTOR_H
 #define JSONRPC_MOCKSERVERCONNECTOR_H
 
-#include <jsonrpccppskale/common/jsonparser.h>
-#include <jsonrpccppskale/server/abstractserverconnector.h>
+#include <jsonrpccpp/common/jsonparser.h>
+#include <jsonrpccpp/server/abstractserverconnector.h>
 
-namespace jsonrpcskale {
+namespace jsonrpc {
 
 class MockServerConnector : public AbstractServerConnector {
 public:
@@ -33,6 +33,6 @@ private:
   std::string response;
 };
 
-} // namespace jsonrpcskale
+} // namespace jsonrpc
 
 #endif // JSONRPC_MOCKSERVERCONNECTOR_H

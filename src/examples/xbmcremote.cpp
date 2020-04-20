@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    xbmcremote.cpp
  * @date    03.06.2013
@@ -8,7 +8,7 @@
  ************************************************************************/
 
 #include "gen/xbmcremote.h"
-#include <jsonrpccppskale/client/connectors/httpclient.h>
+#include <jsonrpccpp/client/connectors/httpclient.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 // Taken from:
@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 
   if (argc < 2) {
     cerr << "Provide XBMC API URL as argument! e.g.: " << argv[0]
-         << " http://127.0.0.1:8080/jsonrpcskale" << endl;
+         << " http://127.0.0.1:8080/jsonrpc" << endl;
     return -1;
   } else {
     cout << "XBMC Remote control" << endl;

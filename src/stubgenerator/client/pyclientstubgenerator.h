@@ -3,12 +3,12 @@
 
 #include "../stubgenerator.h"
 
-namespace jsonrpcskale
+namespace jsonrpc
 {
     /**
-     * The stub client this class generates requires jsonrpcskale_pyclient
+     * The stub client this class generates requires jsonrpc_pyclient
      * to be installed from pypi.
-     * https://github.com/tvannoy/jsonrpcskale_pyclient
+     * https://github.com/tvannoy/jsonrpc_pyclient
      */
     class PythonClientStubGenerator : public StubGenerator
     {

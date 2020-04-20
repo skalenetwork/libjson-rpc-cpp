@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    jsclientstubgenerator.h
  * @date    10/22/2014
@@ -12,7 +12,7 @@
 
 #include "../stubgenerator.h"
 
-namespace jsonrpcskale {
+namespace jsonrpc {
 
     class JSClientStubGenerator : public StubGenerator
     {
@@ -30,6 +30,6 @@ namespace jsonrpcskale {
 
     };
 
-} // namespace jsonrpcskale
+} // namespace jsonrpc
 
 #endif // JSONRPC_JSCLIENTSTUBGENERATOR_H

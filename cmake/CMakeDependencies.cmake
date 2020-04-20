@@ -1,4 +1,4 @@
-# all dependencies that are not directly included in the libjson-rpc-skale-cpp distribution are defined here!
+# all dependencies that are not directly included in the libjson-rpc-cpp distribution are defined here!
 # default search directory for dependencies is ${CMAKE_SOURCE_DIR}/win32-deps (for backwards compatibility)
 # if your dependencies directory is different, please run cmake with CMAKE_PREFIX_PATH option eg:
 #

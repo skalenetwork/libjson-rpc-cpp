@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    CPPServerStubGenerator.cpp
  * @date    01.05.2013
@@ -11,23 +11,23 @@
 #include "../helper/cpphelper.h"
 
 #include <algorithm>
-#include <jsonrpccppskale/common/specificationwriter.h>
+#include <jsonrpccpp/common/specificationwriter.h>
 #include <sstream>
 
 #define TEMPLATE_CPPSERVER_METHODBINDING                                       \
-  "this->bindAndAddMethod(jsonrpcskale::Procedure(\"<rawprocedurename>\", "         \
+  "this->bindAndAddMethod(jsonrpc::Procedure(\"<rawprocedurename>\", "         \
   "<paramtype>, <returntype>, <parameterlist> NULL), "                         \
   "&<stubname>::<procedurename>I);"
 #define TEMPLATE_CPPSERVER_NOTIFICATIONBINDING                                 \
-  "this->bindAndAddNotification(jsonrpcskale::Procedure(\"<rawprocedurename>\", "   \
+  "this->bindAndAddNotification(jsonrpc::Procedure(\"<rawprocedurename>\", "   \
   "<paramtype>, <parameterlist> NULL), &<stubname>::<procedurename>I);"
 
 #define TEMPLATE_CPPSERVER_SIGCLASS                                            \
-  "class <stubname> : public jsonrpcskale::AbstractServer<<stubname>>"
+  "class <stubname> : public jsonrpc::AbstractServer<<stubname>>"
 #define TEMPLATE_CPPSERVER_SIGCONSTRUCTOR                                      \
-  "<stubname>(jsonrpcskale::AbstractServerConnector &conn, "                        \
-  "jsonrpcskale::serverVersion_t type = jsonrpcskale::JSONRPC_SERVER_V2) : "             \
-  "jsonrpcskale::AbstractServer<<stubname>>(conn, type)"
+  "<stubname>(jsonrpc::AbstractServerConnector &conn, "                        \
+  "jsonrpc::serverVersion_t type = jsonrpc::JSONRPC_SERVER_V2) : "             \
+  "jsonrpc::AbstractServer<<stubname>>(conn, type)"
 
 #define TEMPLATE_CPPSERVER_SIGMETHOD                                           \
   "inline virtual void <procedurename>I(const Json::Value &request, "          \
@@ -44,7 +44,7 @@
   "virtual <returntype> <procedurename>(<parameterlist>) = 0;"
 
 using namespace std;
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 
 CPPServerStubGenerator::CPPServerStubGenerator(const std::string &stubname,
                                                vector<Procedure> &procedures,
@@ -60,7 +60,7 @@ void CPPServerStubGenerator::generateStub() {
   vector<string> classname = CPPHelper::splitPackages(this->stubname);
   CPPHelper::prolog(*this, this->stubname);
 
-  this->writeLine("#include <jsonrpccppskale/server.h>");
+  this->writeLine("#include <jsonrpccpp/server.h>");
   this->writeNewLine();
 
   int depth = CPPHelper::namespaceOpen(*this, stubname);
@@ -112,9 +112,9 @@ void CPPServerStubGenerator::generateBindings() {
     replaceAll2(tmp, "<stubname>", this->stubname);
 
     if (proc.GetParameterDeclarationType() == PARAMS_BY_NAME) {
-      replaceAll2(tmp, "<paramtype>", "jsonrpcskale::PARAMS_BY_NAME");
+      replaceAll2(tmp, "<paramtype>", "jsonrpc::PARAMS_BY_NAME");
     } else {
-      replaceAll2(tmp, "<paramtype>", "jsonrpcskale::PARAMS_BY_POSITION");
+      replaceAll2(tmp, "<paramtype>", "jsonrpc::PARAMS_BY_POSITION");
     }
 
     this->writeLine(tmp);

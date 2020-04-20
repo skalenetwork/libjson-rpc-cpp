@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    test_connector_http.cpp
  * @date    28.09.2013
@@ -10,14 +10,14 @@
 #ifdef HTTP_TESTING
 #include <catch2/catch.hpp>
 #include <curl/curl.h>
-#include <jsonrpccppskale/client/connectors/httpclient.h>
-#include <jsonrpccppskale/server/connectors/httpserver.h>
+#include <jsonrpccpp/client/connectors/httpclient.h>
+#include <jsonrpccpp/server/connectors/httpserver.h>
 
 #include "checkexception.h"
 #include "mockclientconnectionhandler.h"
 #include "testhttpserver.h"
 
-using namespace jsonrpcskale;
+using namespace jsonrpc;
 using namespace std;
 
 #define TEST_PORT 8383

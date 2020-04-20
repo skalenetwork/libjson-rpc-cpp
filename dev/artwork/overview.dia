@@ -98,7 +98,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#libjsonrpccppskale-client#</dia:string>
+        <dia:string>#libjsonrpccpp-client#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="UML - LargePackage" version="0" id="O1">
@@ -136,7 +136,7 @@
         <dia:string>##</dia:string>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#libjsonrpccppskale-server#</dia:string>
+        <dia:string>#libjsonrpccpp-server#</dia:string>
       </dia:attribute>
     </dia:object>
   </dia:layer>
@@ -267,7 +267,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#jsonrpcskalestub#</dia:string>
+            <dia:string>#jsonrpcstub#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -1446,7 +1446,7 @@
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#libsjson-rpc-skale-cpp#</dia:string>
+            <dia:string>#libsjson-rpc-cpp#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="Source Code Pro" style="80" name="Courier"/>

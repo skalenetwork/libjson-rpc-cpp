@@ -1,5 +1,5 @@
 /*************************************************************************
- * libjson-rpc-skale-cpp
+ * libjson-rpc-cpp
  *************************************************************************
  * @file    clientstubgenerator.h
  * @date    01.05.2013
@@ -13,7 +13,7 @@
 #include "../stubgenerator.h"
 #include "../codegenerator.h"
 
-namespace jsonrpcskale
+namespace jsonrpc
 {
     class CPPClientStubGenerator : public StubGenerator
     {
