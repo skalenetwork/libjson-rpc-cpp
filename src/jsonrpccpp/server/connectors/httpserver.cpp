@@ -7,7 +7,7 @@
  * @license See attached LICENSE.txt
  ************************************************************************/
 
-#include "httpserver.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -20,6 +20,13 @@
 
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
+
+#include "common.h"
+
+
+#include "httpserver.h"
+
+
 
 using namespace jsonrpc;
 using namespace std;
@@ -233,9 +240,7 @@ bool HttpServer::StartListening() {
             MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_SOCK_ADDR, (struct sockaddr *)(&(this->loopback_addr)), MHD_OPTION_END);
 
     } else if (this->path_sslcert != "" && this->path_sslkey != "") {
-      //std::cerr << "enter https version" << std::endl;
       try {
-        //std::cerr << "enter try" << std::endl;
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
         SpecificationParser::GetFileContent(this->path_sslca, this->sslca);
@@ -244,7 +249,7 @@ bool HttpServer::StartListening() {
           std::cerr << " root ca not found " << std::endl;
         }
         else{
-          std::cerr << " root ca is found " << std::endl;
+          spdlog::info(" Root CA is found")
         }
 
         this->daemon = MHD_start_daemon(
