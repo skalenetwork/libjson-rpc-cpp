@@ -21,7 +21,7 @@
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
 
-#include "common.h"
+//#include "common.h"
 
 
 #include "httpserver.h"
@@ -249,7 +249,7 @@ bool HttpServer::StartListening() {
           std::cerr << " root ca not found " << std::endl;
         }
         else{
-          spdlog::info(" Root CA is found")
+            std::cerr << " Root CA is found" << std::endl;
         }
 
         this->daemon = MHD_start_daemon(
