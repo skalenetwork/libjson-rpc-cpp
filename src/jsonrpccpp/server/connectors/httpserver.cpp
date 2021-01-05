@@ -283,7 +283,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       std::cerr << "could not get cwd";
       exit(-1);
     }
-    std::cerr << "HERE\n";
 
     gnutls_certificate_credentials_t ca_cred;
     gnutls_certificate_allocate_credentials(&ca_cred);
@@ -293,6 +292,7 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     if (res == 0) {
       std::cerr << "no ca cert" << std::endl;
       gnutls_certificate_free_credentials(ca_cred);
+      delete client_connection;
       *con_cls = NULL;
       return MHD_NO;
     }
@@ -303,6 +303,7 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       std::cerr << "no cert" << std::endl;
       gnutls_certificate_free_credentials(ca_cred);
       *con_cls = NULL;
+      delete client_connection;
       return MHD_NO;
     } else {
       std::cerr << "Got client cerificate" << std::endl;
