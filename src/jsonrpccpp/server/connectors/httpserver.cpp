@@ -43,76 +43,21 @@ using namespace std;
  */
 
 
-char * cert_auth_get_dn(gnutls_x509_crt_t client_cert)
-{
-  char* buf;
+std::string cert_auth_get_dn(gnutls_x509_crt_t client_cert) {
   size_t lbuf = 0;
 
   gnutls_x509_crt_get_dn(client_cert, NULL, &lbuf);
-  buf = (char*)malloc(lbuf);
-  if (buf == NULL)
-  {
-    fprintf (stderr,
-             "Failed to allocate memory for certificate dn\n");
-    return NULL;
-  }
-  gnutls_x509_crt_get_dn(client_cert, buf, &lbuf);
-  return buf;
-}
+  std::string buf;
+  buf.reserve(lbuf);
 
-char * MHD_cert_auth_get_alt_name(gnutls_x509_crt_t client_cert,
-                           int nametype,
-                           unsigned int index)
-{
-  char* buf;
-  size_t lbuf;
-  unsigned int seq;
-  unsigned int subseq;
-  unsigned int type;
-  int result;
-
-  subseq = 0;
-  for (seq=0;;seq++)
-  {
-    lbuf = 0;
-    result = gnutls_x509_crt_get_subject_alt_name2(client_cert, seq, NULL, &lbuf,
-                                                   &type, NULL);
-    if (result == GNUTLS_E_REQUESTED_DATA_NOT_AVAILABLE)
-      return NULL;
-    if (nametype != (int) type)
-      continue;
-    if (subseq == index)
-      break;
-    subseq++;
-  }
-  buf = (char*)malloc(lbuf);
-  if (buf == NULL)
-  {
-    fprintf (stderr,
-             "Failed to allocate memory for certificate alt name\n");
-    return NULL;
-  }
-  result = gnutls_x509_crt_get_subject_alt_name2(client_cert,
-                                                 seq,
-                                                 buf,
-                                                 &lbuf,
-                                                 NULL, NULL);
-  if (result != nametype)
-  {
-    fprintf (stderr,
-             "Unexpected return value from gnutls: %d\n",
-             result);
-    free (buf);
-    return NULL;
-  }
+  gnutls_x509_crt_get_dn(client_cert, &buf[0], &lbuf);
   return buf;
 }
 
 
-static gnutls_x509_crt_t get_client_certificate (gnutls_session_t tls_session)
-{
-  unsigned int listsize;
-  const gnutls_datum_t * pcert;
+static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
+  unsigned int list_size;
+  const gnutls_datum_t* pcert;
 
   //gnutls_certificate_status_t client_cert_status;
   unsigned int client_cert_status;
@@ -120,44 +65,32 @@ static gnutls_x509_crt_t get_client_certificate (gnutls_session_t tls_session)
 
   if (tls_session == NULL)
     return NULL;
-  if (gnutls_certificate_verify_peers2(tls_session,
-                                       &client_cert_status)){
+  if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
   std::cerr << "client cert is verified with status "  << client_cert_status << std::endl;
 
-  if (client_cert_status != 0){
+  if (client_cert_status != 0) {
     std::cerr << "client cert is not verified" << std::endl;
     return NULL;
   }
-  //else std::cerr << "client cert verified with status "  << client_cert_status << std::endl;
 
-  pcert = gnutls_certificate_get_peers(tls_session,
-                                       &listsize);
-  if ( (pcert == NULL) ||
-       (listsize == 0))
-  {
-    fprintf (stderr,
-             "Failed to retrieve client certificate chain\n");
+  pcert = gnutls_certificate_get_peers(tls_session, &list_size);
+  if (pcert == NULL || list_size == 0) {
+    fprintf(stderr, "Failed to retrieve client certificate chain\n");
     return NULL;
   }
-  else std::cerr << "list size is " << listsize << std::endl;
+  else std::cerr << "list size is " << list_size << std::endl;
 
-  if (gnutls_x509_crt_init(&client_cert))
-  {
-    fprintf (stderr,
-             "Failed to initialize client certificate\n");
+  if (gnutls_x509_crt_init(&client_cert)) {
+    fprintf(stderr, "Failed to initialize client certificate\n");
     return NULL;
   }
   /* Note that by passing values between 0 and listsize here, you
      can get access to the CA's certs */
-  if (gnutls_x509_crt_import(client_cert,
-                             &pcert[0],
-                             GNUTLS_X509_FMT_DER))
-  {
-    fprintf (stderr,
-             "Failed to import client certificate\n");
+  if (gnutls_x509_crt_import(client_cert, &pcert[0], GNUTLS_X509_FMT_DER)) {
+    fprintf(stderr, "Failed to import client certificate\n");
     gnutls_x509_crt_deinit(client_cert);
     return NULL;
   }
@@ -209,7 +142,6 @@ HttpServer& HttpServer::BindLocalhost() {
 }
 
 bool HttpServer::StartListening() {
-  //std::cerr << "enter StartListening " << std::endl;
   if (!this->running) {
     const bool has_epoll =
         (MHD_is_feature_supported(MHD_FEATURE_EPOLL) == MHD_YES);
@@ -245,7 +177,7 @@ bool HttpServer::StartListening() {
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
         SpecificationParser::GetFileContent(this->path_sslca, this->sslca);
 
-        if ( this->sslca.length() == 0){
+        if ( this->sslca.length() == 0) {
           std::cerr << " root ca not found " << std::endl;
         }
         else{
@@ -265,7 +197,6 @@ bool HttpServer::StartListening() {
         return false;
       }
     } else {
-      //std::cerr << "enter http version" << std::endl;
       this->daemon = MHD_start_daemon(
           mhd_flags, this->port, NULL, NULL, HttpServer::callback, this,
           MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_END);
@@ -328,7 +259,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
                          const char *method, const char *version,
                          const char *upload_data, size_t *upload_data_size,
                          void **con_cls) {
-
   (void)version;
   if (*con_cls == NULL) {
     struct mhd_coninfo *client_connection = new mhd_coninfo;
@@ -337,61 +267,50 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     *con_cls = client_connection;
     return MHD_YES;
   }
-  struct mhd_coninfo *client_connection =
-      static_cast<struct mhd_coninfo *>(*con_cls);
+  struct mhd_coninfo *client_connection = static_cast<struct mhd_coninfo *>(*con_cls);
 
 
   if ( client_connection->server->is_client_cert_checked() ) {
 
     const union MHD_ConnectionInfo *ci1;
 
-    ci1 = MHD_get_connection_info(connection,
-                                  MHD_CONNECTION_INFO_GNUTLS_SESSION);
+    ci1 = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_GNUTLS_SESSION);
 
     gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
 
-      char cwd[PATH_MAX];
-      if (getcwd(cwd, sizeof(cwd)) == NULL) {
-          cerr << "could not get cwd";
-          exit(-1);
-      }
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+      std::cerr << "could not get cwd";
+      exit(-1);
+    }
+    std::cerr << "HERE\n";
 
-
-      gnutls_certificate_credentials_t ca_cred;
+    gnutls_certificate_credentials_t ca_cred;
     gnutls_certificate_allocate_credentials(&ca_cred);
     std::string ca_dir = string(cwd) + "/sgx_data/cert_data";
-    int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
+    int res = gnutls_certificate_set_x509_trust_dir(ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
     std::cerr << " number of ca found  in " << ca_dir << " is " << res << std::endl;
     if (res == 0) {
       std::cerr << "no ca cert" << std::endl;
-      delete client_connection;
+      gnutls_certificate_free_credentials(ca_cred);
       *con_cls = NULL;
       return MHD_NO;
     }
-    //gnutls_certificate_set_x509_system_trust();
-
-
-    //gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
 
     gnutls_x509_crt_t client_certificate = get_client_certificate(tls_session1);
 
     if (client_certificate == NULL) {
       std::cerr << "no cert" << std::endl;
-      delete client_connection;
+      gnutls_certificate_free_credentials(ca_cred);
       *con_cls = NULL;
       return MHD_NO;
     } else {
       std::cerr << "Got client cerificate" << std::endl;
-      std::cerr << "authority is " << cert_auth_get_dn(client_certificate)
-                << std::endl;
-//      std::cerr << "alternative name is "
-//                << MHD_cert_auth_get_alt_name(client_certificate, 0, 0)
-//                << std::endl;
+      std::cerr << "authority is " << cert_auth_get_dn(client_certificate).c_str() << std::endl;
     }
     gnutls_x509_crt_deinit(client_certificate);
     gnutls_certificate_free_credentials(ca_cred);
   }
-
 
 
   if (string("POST") == method) {
@@ -418,13 +337,9 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     client_connection->server->SendOptionsResponse(client_connection);
   } else {
     client_connection->code = MHD_HTTP_METHOD_NOT_ALLOWED;
-    client_connection->server->SendResponse("Not allowed HTTP Method",
-                                            client_connection);
+    client_connection->server->SendResponse("Not allowed HTTP Method", client_connection);
   }
 
-
-
-  //gnutls_x509_crt_deinit (client_cert);
 
   if (client_connection != nullptr)
   {
