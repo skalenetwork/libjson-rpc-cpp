@@ -341,56 +341,56 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       static_cast<struct mhd_coninfo *>(*con_cls);
 
 
-  if ( client_connection->server->is_client_cert_checked() ) {
+//  if ( client_connection->server->is_client_cert_checked() ) {
 
-    const union MHD_ConnectionInfo *ci1;
+//    const union MHD_ConnectionInfo *ci1;
 
-    ci1 = MHD_get_connection_info(connection,
-                                  MHD_CONNECTION_INFO_GNUTLS_SESSION);
+//    ci1 = MHD_get_connection_info(connection,
+//                                  MHD_CONNECTION_INFO_GNUTLS_SESSION);
 
-    gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
+//    gnutls_session_t tls_session1 = (gnutls_session_t)ci1->tls_session;
 
-      char cwd[PATH_MAX];
-      if (getcwd(cwd, sizeof(cwd)) == NULL) {
-          cerr << "could not get cwd";
-          exit(-1);
-      }
-
-
-      gnutls_certificate_credentials_t ca_cred;
-    gnutls_certificate_allocate_credentials(&ca_cred);
-    std::string ca_dir = string(cwd) + "/sgx_data/cert_data";
-    int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
-    std::cerr << " number of ca found  in " << ca_dir << " is " << res << std::endl;
-    if (res == 0) {
-      std::cerr << "no ca cert" << std::endl;
-      delete client_connection;
-      *con_cls = NULL;
-      return MHD_NO;
-    }
-    //gnutls_certificate_set_x509_system_trust();
+//      char cwd[PATH_MAX];
+//      if (getcwd(cwd, sizeof(cwd)) == NULL) {
+//          cerr << "could not get cwd";
+//          exit(-1);
+//      }
 
 
-    //gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
+//      gnutls_certificate_credentials_t ca_cred;
+//    gnutls_certificate_allocate_credentials(&ca_cred);
+//    std::string ca_dir = string(cwd) + "/sgx_data/cert_data";
+//    int res = gnutls_certificate_set_x509_trust_dir (ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
+//    std::cerr << " number of ca found  in " << ca_dir << " is " << res << std::endl;
+//    if (res == 0) {
+//      std::cerr << "no ca cert" << std::endl;
+//      delete client_connection;
+//      *con_cls = NULL;
+//      return MHD_NO;
+//    }
+//    //gnutls_certificate_set_x509_system_trust();
 
-    gnutls_x509_crt_t client_certificate = get_client_certificate(tls_session1);
 
-    if (client_certificate == NULL) {
-      std::cerr << "no cert" << std::endl;
-      delete client_connection;
-      *con_cls = NULL;
-      return MHD_NO;
-    } else {
-      std::cerr << "Got client cerificate" << std::endl;
-      std::cerr << "authority is " << cert_auth_get_dn(client_certificate)
-                << std::endl;
-//      std::cerr << "alternative name is "
-//                << MHD_cert_auth_get_alt_name(client_certificate, 0, 0)
+//    //gnutls_certificate_server_set_request(tls_session1, GNUTLS_CERT_REQUIRE);
+
+//    gnutls_x509_crt_t client_certificate = get_client_certificate(tls_session1);
+
+//    if (client_certificate == NULL) {
+//      std::cerr << "no cert" << std::endl;
+//      delete client_connection;
+//      *con_cls = NULL;
+//      return MHD_NO;
+//    } else {
+//      std::cerr << "Got client cerificate" << std::endl;
+//      std::cerr << "authority is " << cert_auth_get_dn(client_certificate)
 //                << std::endl;
-    }
-    gnutls_x509_crt_deinit(client_certificate);
-    gnutls_certificate_free_credentials(ca_cred);
-  }
+////      std::cerr << "alternative name is "
+////                << MHD_cert_auth_get_alt_name(client_certificate, 0, 0)
+////                << std::endl;
+//    }
+//    gnutls_x509_crt_deinit(client_certificate);
+//    gnutls_certificate_free_credentials(ca_cred);
+//  }
 
 
 
