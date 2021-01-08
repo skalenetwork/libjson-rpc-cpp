@@ -38,8 +38,8 @@ using namespace std;
  * Get the client's certificate
  *
  * @param tls_session the TLS session
- * @return NULL if no valid client certificate could be found, a pointer
- *  	to the certificate if found
+ * @return NULL if no valid client certificate could be found, a string
+ *  	containing the certificate if found
  */
 
 
@@ -59,7 +59,6 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   unsigned int list_size;
   const gnutls_datum_t* pcert;
 
-  //gnutls_certificate_status_t client_cert_status;
   unsigned int client_cert_status;
   gnutls_x509_crt_t client_cert;
 
@@ -143,10 +142,8 @@ HttpServer& HttpServer::BindLocalhost() {
 
 bool HttpServer::StartListening() {
   if (!this->running) {
-    const bool has_epoll =
-        (MHD_is_feature_supported(MHD_FEATURE_EPOLL) == MHD_YES);
-    const bool has_poll =
-        (MHD_is_feature_supported(MHD_FEATURE_POLL) == MHD_YES);
+    const bool has_epoll = (MHD_is_feature_supported(MHD_FEATURE_EPOLL) == MHD_YES);
+    const bool has_poll = (MHD_is_feature_supported(MHD_FEATURE_POLL) == MHD_YES);
     unsigned int mhd_flags;
 
     if (has_epoll)
@@ -217,40 +214,33 @@ bool HttpServer::StopListening() {
 }
 
 bool HttpServer::SendResponse(const string &response, void *addInfo) {
-  struct mhd_coninfo *client_connection =
-      static_cast<struct mhd_coninfo *>(addInfo);
+  struct mhd_coninfo *client_connection = static_cast<struct mhd_coninfo *>(addInfo);
   struct MHD_Response *result = MHD_create_response_from_buffer(
       response.size(), (void *)response.c_str(), MHD_RESPMEM_MUST_COPY);
 
   MHD_add_response_header(result, "Content-Type", "application/json");
   MHD_add_response_header(result, "Access-Control-Allow-Origin", "*");
 
-  int ret = MHD_queue_response(client_connection->connection,
-                               client_connection->code, result);
+  int ret = MHD_queue_response(client_connection->connection, client_connection->code, result);
   MHD_destroy_response(result);
   return ret == MHD_YES;
 }
 
 bool HttpServer::SendOptionsResponse(void *addInfo) {
-  struct mhd_coninfo *client_connection =
-      static_cast<struct mhd_coninfo *>(addInfo);
-  struct MHD_Response *result =
-      MHD_create_response_from_buffer(0, NULL, MHD_RESPMEM_MUST_COPY);
+  struct mhd_coninfo *client_connection = static_cast<struct mhd_coninfo *>(addInfo);
+  struct MHD_Response *result = MHD_create_response_from_buffer(0, NULL, MHD_RESPMEM_MUST_COPY);
 
   MHD_add_response_header(result, "Allow", "POST, OPTIONS");
   MHD_add_response_header(result, "Access-Control-Allow-Origin", "*");
-  MHD_add_response_header(result, "Access-Control-Allow-Headers",
-                          "origin, content-type, accept");
+  MHD_add_response_header(result, "Access-Control-Allow-Headers", "origin, content-type, accept");
   MHD_add_response_header(result, "DAV", "1");
 
-  int ret = MHD_queue_response(client_connection->connection,
-                               client_connection->code, result);
+  int ret = MHD_queue_response(client_connection->connection, client_connection->code, result);
   MHD_destroy_response(result);
   return ret == MHD_YES;
 }
 
-void HttpServer::SetUrlHandler(const string &url,
-                               IClientConnectionHandler *handler) {
+void HttpServer::SetUrlHandler(const string &url, IClientConnectionHandler *handler) {
   this->urlhandler[url] = handler;
   this->SetHandler(NULL);
 }
@@ -321,12 +311,10 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       return MHD_YES;
     } else {
       string response;
-      IClientConnectionHandler *handler =
-          client_connection->server->GetHandler(string(url));
+      IClientConnectionHandler *handler = client_connection->server->GetHandler(string(url));
       if (handler == NULL) {
         client_connection->code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        client_connection->server->SendResponse(
-            "No client connection handler found", client_connection);
+        client_connection->server->SendResponse("No client connection handler found", client_connection);
       } else {
         client_connection->code = MHD_HTTP_OK;
         handler->HandleRequest(client_connection->request.str(), response);
