@@ -70,9 +70,6 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     fprintf(stderr, "Failed to retrieve client certificate chain\n");
     return NULL;
   }
-  else {
-    std::cerr << "list size is " << list_size << std::endl;
-  }
 
   std::vector<uint8_t> pcert_data(pcert.size);
   for (size_t i = 0; i < pcert.size; ++i) {
@@ -87,8 +84,6 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
-
-  std::cerr << "client cert is verified with status "  << client_cert_status << std::endl;
 
   if (client_cert_status != 0) {
     std::cerr << "client cert is not verified" << std::endl;
@@ -192,11 +187,8 @@ bool HttpServer::StartListening() {
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
         SpecificationParser::GetFileContent(this->path_sslca, this->sslca);
 
-        if ( this->sslca.length() == 0) {
-          std::cerr << " root ca not found " << std::endl;
-        }
-        else{
-            std::cerr << " Root CA is found" << std::endl;
+        if ( this->sslca.length() == 0 ) {
+          std::cerr << "Root ca not found " << std::endl;
         }
 
         this->daemon = MHD_start_daemon(
@@ -296,7 +288,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     gnutls_certificate_allocate_credentials(&ca_cred);
     std::string ca_dir = string(cwd) + "/sgx_data/cert_data";
     int res = gnutls_certificate_set_x509_trust_dir(ca_cred, ca_dir.c_str(), GNUTLS_X509_FMT_PEM);
-    std::cerr << " number of ca found  in " << ca_dir << " is " << res << std::endl;
     if (res == 0) {
       std::cerr << "no ca cert" << std::endl;
       gnutls_certificate_free_credentials(ca_cred);
@@ -314,8 +305,15 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
       delete client_connection;
       return MHD_NO;
     } else {
-      std::cerr << "Got client cerificate" << std::endl;
-      std::cerr << "authority is " << cert_auth_get_dn(client_certificate).c_str() << std::endl;
+      std::string dn = cert_auth_get_dn(client_certificate);
+      if ( dn.size() == 0 ) {
+        std::cerr << "Error ocured. DN size is 0" << std::endl;
+        gnutls_x509_crt_deinit(client_certificate);
+        gnutls_certificate_free_credentials(ca_cred);
+        *con_cls = NULL;
+        delete client_connection;
+        return MHD_NO;
+      }
     }
     gnutls_x509_crt_deinit(client_certificate);
     gnutls_certificate_free_credentials(ca_cred);
