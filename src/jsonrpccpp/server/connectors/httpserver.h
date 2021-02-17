@@ -29,9 +29,14 @@ typedef intptr_t ssize_t;
 #endif
 
 #include "../abstractserverconnector.h"
+
+
 #include <map>
 #include <mutex>
 #include <vector>
+
+#include <gnutls/gnutls.h>
+#include <gnutls/x509.h>
 #include <microhttpd.h>
 
 namespace jsonrpc {
