@@ -31,6 +31,8 @@ using namespace std;
 #define BUFFERSIZE 65536
 
 
+std::mutex HttpServer::certs_mutex;
+
 /**
  * Get the client's certificate
  *
