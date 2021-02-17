@@ -57,7 +57,7 @@ std::string cert_auth_get_dn(gnutls_x509_crt_t client_cert) {
 
 static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   unsigned int list_size;
-  const gnutls_datum_t* pcert = NULL;
+  gnutls_datum_t* pcert = NULL;
 
   unsigned int client_cert_status;
   gnutls_x509_crt_t client_cert;
@@ -71,11 +71,11 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     return NULL;
   }
 
-  const std::lock_guard< std::mutex > lock( certs_mutex );
+  const std::lock_guard< std::mutex > lock( this->certs_mutex );
 
-  std::vector<uint8_t> pcert_data(pcert.size);
-  for (size_t i = 0; i < pcert.size; ++i) {
-    pcert_data[i] = pcert_data.data[i];
+  std::vector<uint8_t> pcert_data(pcert->size);
+  for (size_t i = 0; i < pcert->size; ++i) {
+    pcert_data[i] = pcert_data->data[i];
   }
 
   if ( verifiedCertificates.find(pcert_data) != verifiedCertificates.end() ) {
@@ -314,7 +314,7 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     } else {
       std::string dn = cert_auth_get_dn(client_certificate);
       if ( dn.size() == 0 ) {
-        std::cerr << "Error ocured. DN size is 0" << std::endl;
+        std::cerr << "Error occured. DN size is 0" << std::endl;
         gnutls_x509_crt_deinit(client_certificate);
         gnutls_certificate_free_credentials(ca_cred);
         *con_cls = NULL;
