@@ -71,6 +71,8 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     return NULL;
   }
 
+  const std::lock_guard< std::mutex > lock( certs_mutex );
+
   std::vector<uint8_t> pcert_data(pcert.size);
   for (size_t i = 0; i < pcert.size; ++i) {
     pcert_data[i] = pcert_data.data[i];
