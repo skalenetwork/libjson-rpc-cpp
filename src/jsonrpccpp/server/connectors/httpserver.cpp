@@ -18,9 +18,6 @@
 #include <stdio.h>
 #include <limits.h>
 
-#include <gnutls/gnutls.h>
-#include <gnutls/x509.h>
-
 //#include "common.h"
 
 
