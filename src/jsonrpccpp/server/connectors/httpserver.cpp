@@ -210,7 +210,7 @@ bool HttpServer::StartListening() {
     }
     if (this->daemon != NULL)
       this->running = true;
-    else std::cerr << " daemon is null " << std::endl;
+    else std::cerr << "Daemon is null " << std::endl;
   }
   return this->running;
 }
