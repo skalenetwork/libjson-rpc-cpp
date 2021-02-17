@@ -57,30 +57,43 @@ std::string cert_auth_get_dn(gnutls_x509_crt_t client_cert) {
 
 static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   unsigned int list_size;
-  const gnutls_datum_t* pcert;
+  const gnutls_datum_t* pcert = NULL;
 
   unsigned int client_cert_status;
   gnutls_x509_crt_t client_cert;
 
   if (tls_session == NULL)
     return NULL;
-  if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
-    std::cerr << "not verified" << std::endl;
-    return NULL;
-  }
-  std::cerr << "client cert is verified with status "  << client_cert_status << std::endl;
-
-  if (client_cert_status != 0) {
-    std::cerr << "client cert is not verified" << std::endl;
-    return NULL;
-  }
 
   pcert = gnutls_certificate_get_peers(tls_session, &list_size);
   if (pcert == NULL || list_size == 0) {
     fprintf(stderr, "Failed to retrieve client certificate chain\n");
     return NULL;
   }
-  else std::cerr << "list size is " << list_size << std::endl;
+  else {
+    std::cerr << "list size is " << list_size << std::endl;
+  }
+
+  std::vector<uint8_t> pcert_data(pcert.size);
+  for (size_t i = 0; i < pcert.size; ++i) {
+    pcert_data[i] = pcert_data.data[i];
+  }
+
+  if ( verifiedCertificates.find(pcert_data) != verifiedCertificates.end() ) {
+    return verifiedCertificates[pcert_data];
+  }
+
+  if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
+    std::cerr << "not verified" << std::endl;
+    return NULL;
+  }
+
+  std::cerr << "client cert is verified with status "  << client_cert_status << std::endl;
+
+  if (client_cert_status != 0) {
+    std::cerr << "client cert is not verified" << std::endl;
+    return NULL;
+  }
 
   if (gnutls_x509_crt_init(&client_cert)) {
     fprintf(stderr, "Failed to initialize client certificate\n");
@@ -93,6 +106,11 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     gnutls_x509_crt_deinit(client_cert);
     return NULL;
   }
+
+  verifiedCertificates[pcert_data] = client_cert;
+
+  gnutls_free( pcert );
+
   return client_cert;
 }
 
