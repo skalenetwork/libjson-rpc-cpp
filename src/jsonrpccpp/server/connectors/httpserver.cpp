@@ -32,7 +32,7 @@ using namespace std;
 
 
 std::mutex HttpServer::certs_mutex;
-std::map<std::vector<uint8_t>, gnutls_x509_crt_t> verifiedCertificates;
+std::map<std::vector<uint8_t>, gnutls_x509_crt_t> HttpServer::verifiedCertificates;
 
 /**
  * Get the client's certificate
