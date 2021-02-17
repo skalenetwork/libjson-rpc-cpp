@@ -71,6 +71,8 @@ public:
 
   bool is_client_cert_checked();
 
+  std::mutex certs_mutex;
+
 private:
   int port;
   int threads;
@@ -86,7 +88,6 @@ private:
   struct MHD_Daemon *daemon;
   bool bindlocalhost;
   std::map<std::string, IClientConnectionHandler *> urlhandler;
-  static std::mutex certs_mutex;
   static std::map<std::vector<uint8_t>, gnutls_x509_crt_t> verifiedCertificates;
   struct sockaddr_in loopback_addr;
 
