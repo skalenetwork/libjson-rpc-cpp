@@ -57,7 +57,6 @@ std::string cert_auth_get_dn(gnutls_x509_crt_t client_cert) {
 
 static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   unsigned int list_size;
-  gnutls_datum_t* pcert = NULL;
 
   unsigned int client_cert_status;
   gnutls_x509_crt_t client_cert;
@@ -65,13 +64,14 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   if (tls_session == NULL)
     return NULL;
 
-  pcert = gnutls_certificate_get_peers(tls_session, &list_size);
+  const gnutls_datum_t* pcert = gnutls_certificate_get_peers(tls_session, &list_size);
+  pcert = const_cast<gnutls_datum_t*>(pcert);
   if (pcert == NULL || list_size == 0) {
     fprintf(stderr, "Failed to retrieve client certificate chain\n");
     return NULL;
   }
 
-  const std::lock_guard< std::mutex > lock( this->certs_mutex );
+  const std::lock_guard< std::mutex > lock( certs_mutex );
 
   std::vector<uint8_t> pcert_data(pcert->size);
   for (size_t i = 0; i < pcert->size; ++i) {
