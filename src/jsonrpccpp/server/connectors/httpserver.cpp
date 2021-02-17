@@ -77,26 +77,31 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   }
 
   if ( verifiedCertificates.find(pcert_data) != verifiedCertificates.end() ) {
+    gnutls_free( pcert );
     return verifiedCertificates[pcert_data];
   }
 
   if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
+    gnutls_free( pcert );
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
 
-  if (client_cert_status != 0) {
+  if (client_cert_status != 0 ) {
+    gnutls_free( pcert );
     std::cerr << "client cert is not verified" << std::endl;
     return NULL;
   }
 
   if (gnutls_x509_crt_init(&client_cert)) {
+    gnutls_free( pcert );
     fprintf(stderr, "Failed to initialize client certificate\n");
     return NULL;
   }
   /* Note that by passing values between 0 and listsize here, you
      can get access to the CA's certs */
   if (gnutls_x509_crt_import(client_cert, &pcert[0], GNUTLS_X509_FMT_DER)) {
+    gnutls_free( pcert );
     fprintf(stderr, "Failed to import client certificate\n");
     gnutls_x509_crt_deinit(client_cert);
     return NULL;
