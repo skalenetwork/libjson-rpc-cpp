@@ -78,9 +78,9 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     pcert_data[i] = pcert_data->data[i];
   }
 
-  if ( verifiedCertificates.find(pcert_data) != verifiedCertificates.end() ) {
+  if ( HttpServer::verifiedCertificates.find(pcert_data) != HttpServer::verifiedCertificates.end() ) {
     gnutls_free( pcert );
-    return verifiedCertificates[pcert_data];
+    return HttpServer::verifiedCertificates[pcert_data];
   }
 
   if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
@@ -109,7 +109,7 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     return NULL;
   }
 
-  verifiedCertificates[pcert_data] = client_cert;
+  HttpServer::verifiedCertificates[pcert_data] = client_cert;
 
   gnutls_free( pcert );
 
