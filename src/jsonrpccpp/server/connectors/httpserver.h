@@ -71,7 +71,7 @@ public:
 
   bool is_client_cert_checked();
 
-  std::mutex certs_mutex;
+  static std::mutex certs_mutex;
 
 private:
   int port;
