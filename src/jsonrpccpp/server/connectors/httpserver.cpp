@@ -308,8 +308,8 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     if (client_certificate == NULL) {
       std::cerr << "no cert" << std::endl;
       gnutls_certificate_free_credentials(ca_cred);
-      *con_cls = NULL;
       delete client_connection;
+      *con_cls = NULL;
       return MHD_NO;
     } else {
       std::string dn = cert_auth_get_dn(client_certificate);
@@ -317,8 +317,8 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
         std::cerr << "Error occured. DN size is 0" << std::endl;
         gnutls_x509_crt_deinit(client_certificate);
         gnutls_certificate_free_credentials(ca_cred);
-        *con_cls = NULL;
         delete client_connection;
+        *con_cls = NULL;
         return MHD_NO;
       }
     }
