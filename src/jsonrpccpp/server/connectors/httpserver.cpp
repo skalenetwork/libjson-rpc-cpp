@@ -48,7 +48,7 @@ std::string cert_auth_get_dn(gnutls_x509_crt_t client_cert) {
 
   gnutls_x509_crt_get_dn(client_cert, NULL, &lbuf);
   std::string buf;
-  buf.reserve(lbuf);
+  buf.resize(lbuf);
 
   gnutls_x509_crt_get_dn(client_cert, &buf[0], &lbuf);
   return buf;
@@ -61,13 +61,16 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
   unsigned int client_cert_status;
   gnutls_x509_crt_t client_cert;
 
-  if (tls_session == NULL)
+  if (tls_session == NULL) {
+    std::cout << "HERE1" << std::endl;
     return NULL;
+  }
 
-  const gnutls_datum_t* pcert = gnutls_certificate_get_peers(tls_session, &list_size);
-  // pcert = const_cast<gnutls_datum_t*>(pcert);
+  /*const */gnutls_datum_t* pcert = const_cast<gnutls_datum_t*>(gnutls_certificate_get_peers(tls_session, &list_size));
+//  pcert = const_cast<gnutls_datum_t*>(pcert);
   if (pcert == NULL || list_size == 0) {
     fprintf(stderr, "Failed to retrieve client certificate chain\n");
+    std::cout << "HERE2" << std::endl;
     return NULL;
   }
 
@@ -78,32 +81,42 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     pcert_data[i] = pcert->data[i];
   }
 
-  if ( HttpServer::verifiedCertificates.find(pcert_data) != HttpServer::verifiedCertificates.end() ) {
-    gnutls_free( pcert->data );
-    return HttpServer::verifiedCertificates[pcert_data];
-  }
+//  if ( HttpServer::verifiedCertificates.find(pcert_data) != HttpServer::verifiedCertificates.end() ) {
+//    gnutls_free( pcert->data );
+//    pcert->data = NULL;
+//    pcert->size = 0;
+//    return HttpServer::verifiedCertificates[pcert_data];
+//  }
 
   if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
-    gnutls_free( pcert->data );
+//    gnutls_free( pcert->data );
+//    pcert->data = NULL;
+//    pcert->size = 0;
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
 
   if (client_cert_status != 0 ) {
-    gnutls_free( pcert->data );
+//    gnutls_free( pcert->data );
+//    pcert->data = NULL;
+//    pcert->size = 0;
     std::cerr << "client cert is not verified" << std::endl;
     return NULL;
   }
 
   if (gnutls_x509_crt_init(&client_cert)) {
-    gnutls_free( pcert->data );
+//    gnutls_free( pcert->data );
+//    pcert->data = NULL;
+//    pcert->size = 0;
     fprintf(stderr, "Failed to initialize client certificate\n");
     return NULL;
   }
   /* Note that by passing values between 0 and listsize here, you
      can get access to the CA's certs */
   if (gnutls_x509_crt_import(client_cert, &pcert[0], GNUTLS_X509_FMT_DER)) {
-    gnutls_free( pcert->data );
+//    gnutls_free( pcert->data );
+//    pcert->data = NULL;
+//    pcert->size = 0;
     fprintf(stderr, "Failed to import client certificate\n");
     gnutls_x509_crt_deinit(client_cert);
     return NULL;
@@ -111,7 +124,9 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
 
   HttpServer::verifiedCertificates[pcert_data] = client_cert;
 
-  gnutls_free( pcert->data );
+//  gnutls_free( pcert->data );
+//  pcert->data = NULL;
+//  pcert->size = 0;
 
   return client_cert;
 }
@@ -298,7 +313,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     if (res == 0) {
       std::cerr << "no ca cert" << std::endl;
       gnutls_certificate_free_credentials(ca_cred);
-      delete client_connection;
       *con_cls = NULL;
       return MHD_NO;
     }
@@ -308,7 +322,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     if (client_certificate == NULL) {
       std::cerr << "no cert" << std::endl;
       gnutls_certificate_free_credentials(ca_cred);
-      delete client_connection;
       *con_cls = NULL;
       return MHD_NO;
     } else {
@@ -317,7 +330,6 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
         std::cerr << "Error occured. DN size is 0" << std::endl;
         gnutls_x509_crt_deinit(client_certificate);
         gnutls_certificate_free_credentials(ca_cred);
-        delete client_connection;
         *con_cls = NULL;
         return MHD_NO;
       }
@@ -340,7 +352,7 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
         client_connection->server->SendResponse("No client connection handler found", client_connection);
       } else {
         client_connection->code = MHD_HTTP_OK;
-        handler->HandleRequest(client_connection->request.str(), response);
+//        handler->HandleRequest(client_connection->request.str(), response);
         client_connection->server->SendResponse(response, client_connection);
       }
     }
@@ -352,12 +364,8 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
     client_connection->server->SendResponse("Not allowed HTTP Method", client_connection);
   }
 
-
-  if (client_connection != nullptr)
-  {
-    delete client_connection;
-  }
   *con_cls = NULL;
+  std::cout << "HERE" << std::endl;
 
   return MHD_YES;
 }
