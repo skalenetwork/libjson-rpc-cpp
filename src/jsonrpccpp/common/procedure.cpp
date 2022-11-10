@@ -55,9 +55,9 @@ Procedure::Procedure(const string &name, parameterDeclaration_t paramType,
   this->returntype = JSON_BOOLEAN;
 }
 
-bool Procedure::ValdiateParameters(const Json::Value &parameters) const {
+bool Procedure::ValidateParameters(const Json::Value &parameters) const {
   if (this->parametersName.empty()) {
-    return true;
+    return parameters.empty();
   }
   if (parameters.isArray() && this->paramDeclaration == PARAMS_BY_POSITION) {
     return this->ValidatePositionalParameters(parameters);
