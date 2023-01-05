@@ -57,7 +57,8 @@ Procedure::Procedure(const string &name, parameterDeclaration_t paramType,
 
 bool Procedure::ValidateParameters(const Json::Value &parameters) const {
   if (this->parametersName.empty()) {
-    return parameters.empty();
+    // return parameters.empty(); temporary disabled
+    return true;
   }
   if (parameters.isArray() && this->paramDeclaration == PARAMS_BY_POSITION) {
     return this->ValidatePositionalParameters(parameters);
