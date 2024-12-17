@@ -17,20 +17,14 @@ MockClientConnector::MockClientConnector() {}
 string MockClientConnector::GetRequest() { return request; }
 
 Json::Value MockClientConnector::GetJsonRequest() {
-  Json::Reader reader;
   Json::Value result;
-  if (reader.parse(request, result))
-    return result;
-  else
-    return Json::nullValue;
+  std::istringstream(request) >> result;
+  return result;
 }
 
-void MockClientConnector::SetResponse(const std::string &response) {
-  this->response = response;
-}
+void MockClientConnector::SetResponse(const std::string &response) { this->response = response; }
 
-void MockClientConnector::SendRPCMessage(const string &message,
-                                         string &result) {
+void MockClientConnector::SendRPCMessage(const string &message, string &result) {
   request = message;
   result = this->response;
 }

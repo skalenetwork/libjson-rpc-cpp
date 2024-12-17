@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.4.1] - 2021-11-25
+### Fixed
+- Fedora CI build by updating to Catch v2.13.7
+- Typo in README (#313)
+
+### Changed
+- Vendoring catch library instead of downloading from github
+
+## [1.4.0] - 2021-10-23
+### Fixed
+- Deprecation warnings for Jsoncpp (#312)
+- Compatibility with newer libmicrohttpd versions (>= 0.9.71) (#298 #299)
+- Typo in diagram (#293)
+- File descriptor leaks in connectors
+
+### Changed
+- Moved from travis-ci to circleci (#311)
+- Use `.empty()` checks instead of `.size() == 0`
+
+## [1.3.0] - 2020-01-13
+### Added
+- Linux SerialPort client and server connector(#286)
+- Build example for Centos 7 (#267)
+- `Json::Value` example code (#281)
+- IPv6 Support for `HttpServer` (#275)
+- Added data field in error handler in JS stub generator
+
+### Fixed
+- Incorrect README sections (#280)
+- Incorrect INTERFACE_LINK_LIBRARIES (#253)
+- `HttpClient` Response Code checking (#278)
+
 ## [v1.2.0] - 2019-03-29
 ### Added
 - The `HttpServer` connector now has a `BindLocalhost` method (#261)
@@ -30,13 +62,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Missing documentation about python stubgenerator (#222)
 - Parameter to enable omitEndingLineFeed() (#213)
-- Documenation in examples about throwing serverside errors (#249)
+- Documentation in examples about throwing server side errors (#249)
 
 ### Changed
 - Updated CI images to use Ubuntu 18.04 instead of 17.04
 - Disabled FileDescriptor connectors by default
 - Removed custom FindCURL cmake module (#237)
-- Parameter handling of procedurs without params in stubgenerator
+- Parameter handling of procedures without params in stubgenerator
 
 ## [v1.1.0] - 2018-01-04
 ### Fixed
@@ -53,7 +85,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - dev/testcoverage.sh script which did not create the build directory
 - Indentation in CMakeLists.txt files
 - Positional parameters with more than 10 items
-- C++11 deprecated dynamic excpetion specifiers have been removed
+- C++11 deprecated dynamic exception specifiers have been removed
 - libmicrohttpd legacy detection for `EPOLL`
 
 ### Added
@@ -132,7 +164,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Use CMAKE versioning in manpage.
-- Improvied include scheme of jsoncpp.
+- Improved include scheme of jsoncpp.
 
 ## [v0.4.1] - 2014-12-01
 ### Added

@@ -23,14 +23,11 @@
 using namespace jsonrpc;
 using namespace std;
 
-WindowsTcpSocketClient::WindowsTcpSocketClient(const std::string &hostToConnect,
-                                               const unsigned int &port)
-    : hostToConnect(hostToConnect), port(port) {}
+WindowsTcpSocketClient::WindowsTcpSocketClient(const std::string &hostToConnect, const unsigned int &port) : hostToConnect(hostToConnect), port(port) {}
 
 WindowsTcpSocketClient::~WindowsTcpSocketClient() {}
 
-void WindowsTcpSocketClient::SendRPCMessage(
-    const std::string &message, std::string &result) throw(JsonRpcException) {
+void WindowsTcpSocketClient::SendRPCMessage(const std::string &message, std::string &result) throw(JsonRpcException) {
   SOCKET socket_fd = this->Connect();
   char buffer[BUFFER_SIZE];
   bool fullyWritten = false;
@@ -113,9 +110,7 @@ void WindowsTcpSocketClient::SendRPCMessage(
 string WindowsTcpSocketClient::GetErrorMessage(const int &e) {
   LPVOID lpMsgBuf;
   lpMsgBuf = (LPVOID) "Unknown error";
-  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-                    FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL, e, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, e, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                 (LPTSTR)&lpMsgBuf, 0, NULL);
   string message(static_cast<char *>(lpMsgBuf));
   LocalFree(lpMsgBuf);
@@ -133,23 +128,19 @@ SOCKET WindowsTcpSocketClient::Connect() throw(JsonRpcException) {
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
-	char port[6];
-	itoa(this->port, port, 10);
-    DWORD retval =
-        getaddrinfo(this->hostToConnect.c_str(), port, &hints, &result);
+    char port[6];
+    itoa(this->port, port, 10);
+    DWORD retval = getaddrinfo(this->hostToConnect.c_str(), port, &hints, &result);
     if (retval != 0)
-      throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR,
-                             "Could not resolve hostname.");
+      throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR, "Could not resolve hostname.");
 
     bool foundValidIp = false;
     SOCKET socket_fd = INVALID_SOCKET;
-    for (struct addrinfo *temp = result; (temp != NULL) && !foundValidIp;
-         temp = temp->ai_next) {
+    for (struct addrinfo *temp = result; (temp != NULL) && !foundValidIp; temp = temp->ai_next) {
       if (temp->ai_family == AF_INET) {
         try {
           SOCKADDR_IN *sock = reinterpret_cast<SOCKADDR_IN *>(temp->ai_addr);
-          socket_fd =
-              this->Connect(inet_ntoa(sock->sin_addr), ntohs(sock->sin_port));
+          socket_fd = this->Connect(inet_ntoa(sock->sin_addr), ntohs(sock->sin_port));
           foundValidIp = true;
         } catch (const JsonRpcException &e) {
           foundValidIp = false;
@@ -161,18 +152,17 @@ SOCKET WindowsTcpSocketClient::Connect() throw(JsonRpcException) {
       }
     }
 
-    if (!foundValidIp)
-      throw JsonRpcException(
-          Errors::ERROR_CLIENT_CONNECTOR,
-          "Hostname resolved but connection was refused on the given port.");
+    if (!foundValidIp) {
+      closesocket(socket_fd);
+      throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR, "Hostname resolved but connection was refused on the given port.");
+    }
 
     return socket_fd;
   }
 }
 
 SOCKET
-WindowsTcpSocketClient::Connect(const string &ip,
-                                const int &port) throw(JsonRpcException) {
+WindowsTcpSocketClient::Connect(const string &ip, const int &port) throw(JsonRpcException) {
   SOCKADDR_IN address;
   SOCKET socket_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (socket_fd == INVALID_SOCKET) {
@@ -195,6 +185,7 @@ WindowsTcpSocketClient::Connect(const string &ip,
       message = GetErrorMessage(err);
       break;
     }
+    closesocket(socket_fd);
     throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR, message);
   }
   memset(&address, 0, sizeof(SOCKADDR_IN));
@@ -202,8 +193,7 @@ WindowsTcpSocketClient::Connect(const string &ip,
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = inet_addr(ip.c_str());
   address.sin_port = htons(port);
-  if (connect(socket_fd, reinterpret_cast<SOCKADDR *>(&address),
-              sizeof(SOCKADDR_IN)) != 0) {
+  if (connect(socket_fd, reinterpret_cast<SOCKADDR *>(&address), sizeof(SOCKADDR_IN)) != 0) {
     string message = "connect() failed";
     int err = WSAGetLastError();
     switch (err) {
@@ -229,14 +219,13 @@ WindowsTcpSocketClient::Connect(const string &ip,
       message = GetErrorMessage(err);
       break;
     }
+    closesocket(socket_fd);
     throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR, message);
   }
   return socket_fd;
 }
 
-bool WindowsTcpSocketClient::IsIpv4Address(const std::string &ip) {
-  return (inet_addr(ip.c_str()) != INADDR_NONE);
-}
+bool WindowsTcpSocketClient::IsIpv4Address(const std::string &ip) { return (inet_addr(ip.c_str()) != INADDR_NONE); }
 
 // This is inspired from SFML to manage Winsock initialization. Thanks to them!
 // ( http://www.sfml-dev.org/ ).
@@ -246,8 +235,7 @@ struct ClientSocketInitializer {
   {
     WSADATA init;
     if (WSAStartup(MAKEWORD(2, 2), &init) != 0) {
-      throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR,
-                             "An issue occurred while WSAStartup executed.");
+      throw JsonRpcException(Errors::ERROR_CLIENT_CONNECTOR, "An issue occurred while WSAStartup executed.");
     }
   }
 

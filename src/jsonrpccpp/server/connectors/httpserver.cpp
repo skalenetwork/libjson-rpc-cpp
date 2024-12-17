@@ -161,14 +161,13 @@ HttpServer::~HttpServer() {}
 IClientConnectionHandler *HttpServer::GetHandler(const std::string &url) {
   if (AbstractServerConnector::GetHandler() != NULL)
     return AbstractServerConnector::GetHandler();
-  map<string, IClientConnectionHandler *>::iterator it =
-      this->urlhandler.find(url);
+  map<string, IClientConnectionHandler *>::iterator it = this->urlhandler.find(url);
   if (it != this->urlhandler.end())
     return it->second;
   return NULL;
 }
 
-HttpServer& HttpServer::BindLocalhost() {
+HttpServer &HttpServer::BindLocalhost() {
   this->bindlocalhost = true;
   return *this;
 }
@@ -177,7 +176,7 @@ bool HttpServer::StartListening() {
   if (!this->running) {
     const bool has_epoll = (MHD_is_feature_supported(MHD_FEATURE_EPOLL) == MHD_YES);
     const bool has_poll = (MHD_is_feature_supported(MHD_FEATURE_POLL) == MHD_YES);
-    unsigned int mhd_flags;
+    unsigned int mhd_flags = MHD_USE_DUAL_STACK;
 
     if (has_epoll)
 // In MHD version 0.9.44 the flag is renamed to
@@ -197,11 +196,10 @@ bool HttpServer::StartListening() {
       loopback_addr.sin_port = htons(this->port);
       loopback_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
-      this->daemon = MHD_start_daemon(
-            mhd_flags, this->port, NULL, NULL, HttpServer::callback, this,
-            MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_SOCK_ADDR, (struct sockaddr *)(&(this->loopback_addr)), MHD_OPTION_END);
+      this->daemon = MHD_start_daemon(mhd_flags, this->port, NULL, NULL, HttpServer::callback, this, MHD_OPTION_THREAD_POOL_SIZE, this->threads,
+                                      MHD_OPTION_SOCK_ADDR, (struct sockaddr *)(&(this->loopback_addr)), MHD_OPTION_END);
 
-    } else if (this->path_sslcert != "" && this->path_sslkey != "") {
+    } else if (!this->path_sslcert.empty() && !this->path_sslkey.empty()) {
       try {
         SpecificationParser::GetFileContent(this->path_sslcert, this->sslcert);
         SpecificationParser::GetFileContent(this->path_sslkey, this->sslkey);
@@ -224,9 +222,8 @@ bool HttpServer::StartListening() {
         return false;
       }
     } else {
-      this->daemon = MHD_start_daemon(
-          mhd_flags, this->port, NULL, NULL, HttpServer::callback, this,
-          MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_END);
+      this->daemon =
+          MHD_start_daemon(mhd_flags, this->port, NULL, NULL, HttpServer::callback, this, MHD_OPTION_THREAD_POOL_SIZE, this->threads, MHD_OPTION_END);
     }
     if (this->daemon != NULL)
       this->running = true;
@@ -245,8 +242,7 @@ bool HttpServer::StopListening() {
 
 bool HttpServer::SendResponse(const string &response, void *addInfo) {
   struct mhd_coninfo *client_connection = static_cast<struct mhd_coninfo *>(addInfo);
-  struct MHD_Response *result = MHD_create_response_from_buffer(
-      response.size(), (void *)response.c_str(), MHD_RESPMEM_MUST_COPY);
+  struct MHD_Response *result = MHD_create_response_from_buffer(response.size(), (void *)response.c_str(), MHD_RESPMEM_MUST_COPY);
 
   MHD_add_response_header(result, "Content-Type", "application/json");
   MHD_add_response_header(result, "Access-Control-Allow-Origin", "*");
@@ -275,10 +271,8 @@ void HttpServer::SetUrlHandler(const string &url, IClientConnectionHandler *hand
   this->SetHandler(NULL);
 }
 
-int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
-                         const char *method, const char *version,
-                         const char *upload_data, size_t *upload_data_size,
-                         void **con_cls) {
+HttpServer::MicroHttpdResult HttpServer::callback(void *cls, MHD_Connection *connection, const char *url, const char *method, const char *version,
+                                                  const char *upload_data, size_t *upload_data_size, void **con_cls) {
   (void)version;
   if (*con_cls == NULL) {
     struct mhd_coninfo *client_connection = new mhd_coninfo;
@@ -360,6 +354,10 @@ int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
   } else {
     client_connection->code = MHD_HTTP_METHOD_NOT_ALLOWED;
     client_connection->server->SendResponse("Not allowed HTTP Method", client_connection);
+  }
+
+  if (client_connection != nullptr) {
+    delete client_connection;
   }
 
   *con_cls = NULL;
