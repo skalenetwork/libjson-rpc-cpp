@@ -9,53 +9,37 @@
 
 #include "abstractprotocolhandler.h"
 #include <jsonrpccpp/common/errors.h>
-#include <jsonrpccpp/common/jsonparser.h>
-
+#include <sstream>
 #include <map>
 
 using namespace jsonrpc;
 using namespace std;
 
-AbstractProtocolHandler::AbstractProtocolHandler(
-    IProcedureInvokationHandler &handler)
-    : handler(handler) {}
+AbstractProtocolHandler::AbstractProtocolHandler(IProcedureInvokationHandler &handler) : handler(handler) {}
 
 AbstractProtocolHandler::~AbstractProtocolHandler() {}
 
-void AbstractProtocolHandler::AddProcedure(const Procedure &procedure) {
-  this->procedures[procedure.GetProcedureName()] = procedure;
-}
+void AbstractProtocolHandler::AddProcedure(const Procedure &procedure) { this->procedures[procedure.GetProcedureName()] = procedure; }
 
-void AbstractProtocolHandler::HandleRequest(const std::string &request,
-                                            std::string &retValue) {
-  Json::Reader reader;
+void AbstractProtocolHandler::HandleRequest(const std::string &request, std::string &retValue) {
   Json::Value req;
   Json::Value resp;
   Json::StreamWriterBuilder wbuilder;
   wbuilder["indentation"] = "";
 
   try {
-    if (reader.parse(request, req, false)) {
-      this->HandleJsonRequest(req, resp);
-    } else {
-      this->WrapError(
-          Json::nullValue, Errors::ERROR_RPC_JSON_PARSE_ERROR,
-          Errors::GetErrorMessage(Errors::ERROR_RPC_JSON_PARSE_ERROR), resp);
-    }
+    istringstream(request) >> req;
+    this->HandleJsonRequest(req, resp);
   } catch (const Json::Exception &e) {
-    this->WrapError(Json::nullValue, Errors::ERROR_RPC_JSON_PARSE_ERROR,
-                    Errors::GetErrorMessage(Errors::ERROR_RPC_JSON_PARSE_ERROR),
-                    resp);
+    this->WrapError(Json::nullValue, Errors::ERROR_RPC_JSON_PARSE_ERROR, Errors::GetErrorMessage(Errors::ERROR_RPC_JSON_PARSE_ERROR), resp);
   }
 
   if (resp != Json::nullValue)
-    retValue = Json::writeString(wbuilder,resp);
+    retValue = Json::writeString(wbuilder, resp);
 }
 
-void AbstractProtocolHandler::ProcessRequest(const Json::Value &request,
-                                             Json::Value &response) {
-  Procedure &method =
-      this->procedures[request[KEY_REQUEST_METHODNAME].asString()];
+void AbstractProtocolHandler::ProcessRequest(const Json::Value &request, Json::Value &response) {
+  Procedure &method = this->procedures[request[KEY_REQUEST_METHODNAME].asString()];
   Json::Value result;
 
   if (method.GetProcedureType() == RPC_METHOD) {
@@ -73,15 +57,12 @@ int AbstractProtocolHandler::ValidateRequest(const Json::Value &request) {
   if (!this->ValidateRequestFields(request)) {
     error = Errors::ERROR_RPC_INVALID_REQUEST;
   } else {
-    map<string, Procedure>::iterator it =
-        this->procedures.find(request[KEY_REQUEST_METHODNAME].asString());
+    map<string, Procedure>::iterator it = this->procedures.find(request[KEY_REQUEST_METHODNAME].asString());
     if (it != this->procedures.end()) {
       proc = it->second;
-      if (this->GetRequestType(request) == RPC_METHOD &&
-          proc.GetProcedureType() == RPC_NOTIFICATION) {
+      if (this->GetRequestType(request) == RPC_METHOD && proc.GetProcedureType() == RPC_NOTIFICATION) {
         error = Errors::ERROR_SERVER_PROCEDURE_IS_NOTIFICATION;
-      } else if (this->GetRequestType(request) == RPC_NOTIFICATION &&
-                 proc.GetProcedureType() == RPC_METHOD) {
+      } else if (this->GetRequestType(request) == RPC_NOTIFICATION && proc.GetProcedureType() == RPC_METHOD) {
         error = Errors::ERROR_SERVER_PROCEDURE_IS_METHOD;
       } else if (!proc.ValidateParameters(request[KEY_REQUEST_PARAMETERS])) {
         error = Errors::ERROR_RPC_INVALID_PARAMS;

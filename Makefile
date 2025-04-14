@@ -8,15 +8,12 @@ build:
 	mkdir -p build
 	cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DWITH_COVERAGE=Yes .. && make -j$(nproc)
 
-build-docker:
-	cd docker && make all
-
 coverage: test
 	mkdir -p reports
 	gcovr -r . -d -e "build" -e "src/test" -e "src/examples" -e "src/stubgenerator/main.cpp" --html --html-details -o reports/coverage.html
 
 format:
-	find . -name "*.h" -o -name "*.cpp" -exec clang-format -style=LLVM -i {} \;
+	find src/ -name "*.h" -o -name "*.cpp" -exec clang-format -i {} \;
 
 check-format: format
 	git diff --exit-code

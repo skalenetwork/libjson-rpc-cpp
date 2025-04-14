@@ -17,29 +17,23 @@
 
 namespace jsonrpc {
 
-
-
-
 class HttpClient : public IClientConnector {
-
     static std::string  certFileFullPath;
     static std::string keyFileFullPath;
     static uint32_t sslClientPort;
 public:
     static uint32_t getSslClientPort();
-
     static void setSslClientPort(uint32_t sslClientPort);
-
 public:
   HttpClient(const std::string &url);
   virtual ~HttpClient();
   virtual void SendRPCMessage(const std::string &message, std::string &result);
 
-  void SetUrl(const std::string &url);
-  void SetTimeout(long timeout);
+    void SetUrl(const std::string &url);
+    void SetTimeout(long timeout);
 
-  void AddHeader(const std::string &attr, const std::string &val);
-  void RemoveHeader(const std::string &attr);
+    void AddHeader(const std::string &attr, const std::string &val);
+    void RemoveHeader(const std::string &attr);
 
     static const std::string &getCertFileFullPath();
 
@@ -49,16 +43,16 @@ public:
 
     static void setKeyFileFullPath(const std::string &keyFileFullPath);
 
-private:
+protected:
   std::map<std::string, std::string> headers;
   std::string url;
 
-  /**
-   * @brief timeout for http request in milliseconds
-   */
-  long timeout;
-  CURL *curl;
-};
+    /**
+     * @brief timeout for http request in milliseconds
+     */
+    long timeout;
+    CURL *curl;
+  };
 
 } /* namespace jsonrpc */
 #endif /* JSONRPC_CPP_HTTPCLIENT_H_ */
