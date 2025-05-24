@@ -65,8 +65,7 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     return NULL;
   }
 
-  /*const */gnutls_datum_t* pcert = const_cast<gnutls_datum_t*>(gnutls_certificate_get_peers(tls_session, &list_size));
-//  pcert = const_cast<gnutls_datum_t*>(pcert);
+  gnutls_datum_t* pcert = const_cast<gnutls_datum_t*>(gnutls_certificate_get_peers(tls_session, &list_size));
   if (pcert == NULL || list_size == 0) {
     fprintf(stderr, "Failed to retrieve client certificate chain\n");
     return NULL;
@@ -79,52 +78,28 @@ static gnutls_x509_crt_t get_client_certificate(gnutls_session_t tls_session) {
     pcert_data[i] = pcert->data[i];
   }
 
-//  if ( HttpServer::verifiedCertificates.find(pcert_data) != HttpServer::verifiedCertificates.end() ) {
-//    gnutls_free( pcert->data );
-//    pcert->data = NULL;
-//    pcert->size = 0;
-//    return HttpServer::verifiedCertificates[pcert_data];
-//  }
-
   if (gnutls_certificate_verify_peers2(tls_session, &client_cert_status)) {
-//    gnutls_free( pcert->data );
-//    pcert->data = NULL;
-//    pcert->size = 0;
     std::cerr << "not verified" << std::endl;
     return NULL;
   }
 
   if (client_cert_status != 0 ) {
-//    gnutls_free( pcert->data );
-//    pcert->data = NULL;
-//    pcert->size = 0;
     std::cerr << "client cert is not verified" << std::endl;
     return NULL;
   }
 
   if (gnutls_x509_crt_init(&client_cert)) {
-//    gnutls_free( pcert->data );
-//    pcert->data = NULL;
-//    pcert->size = 0;
     fprintf(stderr, "Failed to initialize client certificate\n");
     return NULL;
   }
+
   /* Note that by passing values between 0 and listsize here, you
      can get access to the CA's certs */
   if (gnutls_x509_crt_import(client_cert, &pcert[0], GNUTLS_X509_FMT_DER)) {
-//    gnutls_free( pcert->data );
-//    pcert->data = NULL;
-//    pcert->size = 0;
     fprintf(stderr, "Failed to import client certificate\n");
     gnutls_x509_crt_deinit(client_cert);
     return NULL;
   }
-
-//  HttpServer::verifiedCertificates[pcert_data] = client_cert;
-
-//  gnutls_free( pcert->data );
-//  pcert->data = NULL;
-//  pcert->size = 0;
 
   return client_cert;
 }
@@ -137,8 +112,7 @@ struct mhd_coninfo {
   int code;
 };
 
-HttpServer::HttpServer(int port, const std::string &sslcert,
-                       const std::string &sslkey, const std::string & sslca, int threads)
+HttpServer::HttpServer(int port, const std::string &sslcert, const std::string &sslkey, int threads)
     : AbstractServerConnector(), port(port), threads(threads), running(false),
       path_sslcert(sslcert), path_sslkey(sslkey), path_sslca(sslca), daemon(NULL), bindlocalhost(false) {
 
