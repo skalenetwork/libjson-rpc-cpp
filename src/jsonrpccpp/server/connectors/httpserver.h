@@ -96,14 +96,6 @@ private:
     typedef int MicroHttpdResult;
 #endif
 
-    int port;
-    int threads;
-    bool running;
-    std::string path_sslcert;
-    std::string path_sslkey;
-    std::string sslcert;
-    std::string sslkey;
-
     struct MHD_Daemon *daemon;
     bool bindlocalhost;
     std::map<std::string, IClientConnectionHandler *> urlhandler;
