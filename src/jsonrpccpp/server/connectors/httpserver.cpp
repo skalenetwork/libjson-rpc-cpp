@@ -138,7 +138,7 @@ struct mhd_coninfo {
 };
 
 HttpServer::HttpServer(int port, const std::string &sslcert,
-                       const std::string &sslkey, const std::string & sslca, int threads)
+                       const std::string &sslkey, int threads)
     : AbstractServerConnector(), port(port), threads(threads), running(false),
       path_sslcert(sslcert), path_sslkey(sslkey), path_sslca(sslca), daemon(NULL), bindlocalhost(false) {
 
